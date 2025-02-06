@@ -1,2 +1,53 @@
 # hakoniwa-unity-drone
-Provides a Unity environment to visualize and control Hakoniwa drone physical models.
+このリポジトリでは、Unity上で箱庭ドローンの物理モデルをビジュアライズ・操作できる環境を提供します。
+
+## ディレクトリ構成
+
+このプロジェクトのディレクトリ構成は以下のとおりです：
+``
+hakoniwa-unity-drone/
+├── LICENSE
+├── README.md
+└── simulation/
+    ├── Assets/
+    │   ├── Configs/        # 設定ファイル
+    │   ├── Models/         # FBXファイルなどの3Dモデル
+    │   ├── Materials/      # マテリアルファイル
+    │   ├── Textures/       # テクスチャファイル
+    │   ├── Prefabs/        # プレハブ
+    │   ├── Scripts/        # スクリプト
+    │   └── Scenes/         # シーンファイル
+    └── [その他のディレクトリ]
+```
+
+## シーン名
+
+ドローンの基本的な飛行テストを行うシーンとして、`SimpleFlightTest` を作成しました。
+このシーンでは、実機と同等の設定パラメータでシミュレーションの動作確認を行うことができます。
+
+## プラグインのディレクトリ構成
+
+クロスプラットフォーム対応を考慮し、各プラットフォームおよびCPUアーキテクチャに対応したプラグインを以下のように配置しています：
+``
+simulation/
+├── Assets/
+│   ├── Plugins/
+│   │   ├── Android/
+│   │   │   ├── ARMv7/
+│   │   │   ├── ARM64/
+│   │   │   └── x86_64/
+│   │   ├── macOS/
+│   │   │   ├── x86_64/
+│   │   │   └── ARM64/
+│   │   ├── Windows/
+│   │   │   ├── x86/
+│   │   │   └── x86_64/
+│   │   ├── Linux/
+│   │   │   ├── x86/
+│   │   │   └── x86_64/
+│   │   └── [共通プラグイン]
+```
+
+
+
+
