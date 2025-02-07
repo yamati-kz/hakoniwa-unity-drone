@@ -44,7 +44,7 @@ public class DronePlayer : MonoBehaviour, IDroneBatteryStatus, ISimTime
         drone_propeller = this.GetComponentInChildren<DronePropeller>();
         if (drone_propeller == null)
         {
-            throw new Exception("Can not found drone propeller");
+            Debug.Log("Can not found drone propeller");
         }
         my_collision.SetIndex(0);
 
@@ -137,11 +137,15 @@ public class DronePlayer : MonoBehaviour, IDroneBatteryStatus, ISimTime
             body.transform.rotation = rotation;
         }
 
-        double c1, c2, c3, c4, c5, c6, c7, c8;
-        ret = DroneServiceRC.GetControls(0, out c1, out c2, out c3, out c4, out c5, out c6, out c7, out c8);
-        if (ret == 0)
+        if (drone_propeller != null)
         {
-            drone_propeller.Rotate((float)c1, (float)c2, (float)c3, (float)c4);
+            double c1, c2, c3, c4, c5, c6, c7, c8;
+            ret = DroneServiceRC.GetControls(0, out c1, out c2, out c3, out c4, out c5, out c6, out c7, out c8);
+            if (ret == 0)
+            {
+                drone_propeller.Rotate((float)c1, (float)c2, (float)c3, (float)c4);
+            }
+
         }
         RunBatteryStatus();
     }
