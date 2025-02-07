@@ -50,9 +50,12 @@ simulation/
 
 # サンプル・ドローン
 
-このプロジェクトには、以下のドローンモデルが含まれています：
+このプロジェクトでは、以下のドローンモデルが含まれています：
 
-- `SimpleDrone`：基本的なドローンモデル
-  - 3Dモデル：`drone-quadcopter.fbx`
+## `SimpleDrone`：基本的なドローンモデル
+- 3Dモデル：`drone-quadcopter.dae`
+  - ベースモデル(実機)：https://holybro.com/products/px4-development-kit-x500-v2?variant=43018371596477
+  - 取得元：[OnShape](https://www.onshape.com/en/)
     - 参照URL：https://cad.onshape.com/documents/309acdd0886d0292a98383c2/w/cf26e885b6bdbeacdfee62cf/e/f5458a8dd2d6f5c8dc2574a3
-    - 実機：https://holybro.com/products/px4-development-kit-x500-v2?variant=43018371596477
+
+<img width="750" alt="スクリーンショット 2025-02-07 16 59 42" src="https://github.com/user-attachments/assets/f0a03247-a2bf-43a0-a0b1-47409a62e0b9" />
