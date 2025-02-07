@@ -217,6 +217,50 @@ namespace Hakoniwa.DroneService
             return drone_service_rc_get_controls(index, out c1, out c2, out c3, out c4, out c5, out c6, out c7, out c8);
         }
         /*
+         * Battery
+         */
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int drone_service_rc_get_battery_status(
+            int index,
+            out double fullVoltage,
+            out double currVoltage,
+            out double currTemp,
+            out uint status,
+            out uint cycles);
+
+        public struct BatteryStatus
+        {
+            public double FullVoltage;
+            public double CurrentVoltage;
+            public double CurrentTemperature;
+            public uint Status;
+            public uint ChargeCycles;
+        }
+
+        public static bool TryGetBatteryStatus(int index, out BatteryStatus batteryStatus)
+        {
+            batteryStatus = new BatteryStatus();
+            try
+            {
+                int result = drone_service_rc_get_battery_status(index, out batteryStatus.FullVoltage, out batteryStatus.CurrentVoltage, out batteryStatus.CurrentTemperature, out batteryStatus.Status, out batteryStatus.ChargeCycles);
+                return result == 0;
+            }
+            catch (DllNotFoundException e)
+            {
+                Debug.LogError($"DllNotFoundException: {e.Message}");
+            }
+            catch (EntryPointNotFoundException e)
+            {
+                Debug.LogError($"EntryPointNotFoundException: {e.Message}");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Exception: {e.Message}");
+            }
+            return false;
+        }
+
+        /*
          * Collision
          */
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]

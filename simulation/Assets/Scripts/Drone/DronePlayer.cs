@@ -3,7 +3,7 @@ using Hakoniwa.DroneService;
 using System;
 using hakoniwa.pdu.msgs.geometry_msgs;
 
-public class DronePlayer : MonoBehaviour
+public class DronePlayer : MonoBehaviour, IDroneBatteryStatus, ISimTime
 {
     public GameObject body;
     public int debuff_duration_msec = 100;
@@ -143,11 +143,52 @@ public class DronePlayer : MonoBehaviour
         {
             drone_propeller.Rotate((float)c1, (float)c2, (float)c3, (float)c4);
         }
+        RunBatteryStatus();
+    }
+    private Hakoniwa.DroneService.DroneServiceRC.BatteryStatus battery_status;
+    private void RunBatteryStatus()
+    {
+        var ret = DroneServiceRC.TryGetBatteryStatus(0, out battery_status);
+        if (!ret)
+        {
+            Debug.LogWarning("Can not read battery status");
+        }
+
     }
 
     private void OnApplicationQuit()
     {
         int ret = DroneServiceRC.Stop();
         Debug.Log("Stop: ret = " + ret);
+    }
+
+    public double get_full_voltage()
+    {
+        return battery_status.FullVoltage;
+    }
+
+    public double get_curr_voltage()
+    {
+        return battery_status.CurrentVoltage;
+    }
+
+    public uint get_status()
+    {
+        return battery_status.Status;
+    }
+
+    public uint get_cycles()
+    {
+        return battery_status.ChargeCycles;
+    }
+
+    public double get_temperature()
+    {
+        return battery_status.CurrentTemperature;
+    }
+
+    public long GetWorldTime()
+    {
+        return (long)DroneServiceRC.GetTimeUsec(0);
     }
 }
