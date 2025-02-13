@@ -1066,6 +1066,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 959794987082139752, guid: 81482dfcee7bc443f8a6d114a8fd071f, type: 3}
+      propertyPath: pdu_name_pos
+      value: pos
+      objectReference: {fileID: 0}
+    - target: {fileID: 959794987082139752, guid: 81482dfcee7bc443f8a6d114a8fd071f, type: 3}
+      propertyPath: pdu_name_propeller
+      value: motor
+      objectReference: {fileID: 0}
     - target: {fileID: 1378977566381767416, guid: 81482dfcee7bc443f8a6d114a8fd071f, type: 3}
       propertyPath: target_camera
       value: 
