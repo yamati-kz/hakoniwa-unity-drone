@@ -11,23 +11,26 @@ namespace Hakoniwa.DroneService
 #else
         private const string DllName = "libhako_service_c"; // Ubuntu, Mac
 #endif
-
         /*
          * Initialization and Control
          */
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int drone_service_rc_init(string drone_config_dir_path, string debug_logpath);
+        private static extern int drone_service_rc_init(int enableDatalog, string droneConfigDirPath, string debugLogPath);
 
         public static int Init(string droneConfigDirPath)
         {
-            return Init(droneConfigDirPath, null);
+            return Init(droneConfigDirPath, null, 0);
         }
 
         public static int Init(string droneConfigDirPath, string debugLogPath)
         {
+            return Init(droneConfigDirPath, debugLogPath, 0);
+        }
+        public static int Init(string droneConfigDirPath, string debugLogPath, int enableDatalog)
+        {
             try
             {
-                return drone_service_rc_init(droneConfigDirPath, debugLogPath);
+                return drone_service_rc_init(enableDatalog, droneConfigDirPath, debugLogPath);
             }
             catch (DllNotFoundException e)
             {

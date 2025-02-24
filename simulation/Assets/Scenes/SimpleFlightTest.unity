@@ -1288,6 +1288,10 @@ PrefabInstance:
       value: pos
       objectReference: {fileID: 0}
     - target: {fileID: 959794987082139752, guid: 81482dfcee7bc443f8a6d114a8fd071f, type: 3}
+      propertyPath: enable_data_logger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 959794987082139752, guid: 81482dfcee7bc443f8a6d114a8fd071f, type: 3}
       propertyPath: pdu_name_propeller
       value: motor
       objectReference: {fileID: 0}
