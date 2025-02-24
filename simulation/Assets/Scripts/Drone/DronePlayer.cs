@@ -48,8 +48,11 @@ public class DronePlayer : MonoBehaviour, IDroneBatteryStatus, ISimTime
         }
         my_collision.SetIndex(0);
 
+        //string droneConfigText = LoadTextFromResources("config/drone/mujoco/drone_config_0");
+        //string controllerConfigText = LoadTextFromResources("config/controller/param-api-mixer-mujoco");
         string droneConfigText = LoadTextFromResources("config/drone/rc/drone_config_0");
-        string controllerConfigText = LoadTextFromResources("config/controller/param-api-mixer");
+        string filename = "org" + "-param-api-mixer";
+        string controllerConfigText = LoadTextFromResources("config/controller/" + filename);
 
         if (string.IsNullOrEmpty(droneConfigText))
         {
