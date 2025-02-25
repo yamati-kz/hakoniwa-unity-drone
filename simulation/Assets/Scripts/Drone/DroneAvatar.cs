@@ -14,6 +14,8 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
     public string pdu_name_propeller = "drone_motor";
     public string pdu_name_pos = "drone_pos";
     public GameObject body;
+    public Rigidbody rd;
+
     private DronePropeller drone_propeller;
 
     public void EventInitialize()
@@ -22,6 +24,10 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
         if (body == null)
         {
             throw new Exception("Body is not assigned");
+        }
+        if (rd == null)
+        {
+            throw new Exception("Can not find rigidbody on " + this.gameObject.name);
         }
         drone_propeller = this.GetComponentInChildren<DronePropeller>();
         if (drone_propeller == null)
@@ -102,21 +108,43 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
             drone_propeller.Rotate((float)propeller.controls[0], (float)propeller.controls[1], (float)propeller.controls[2], (float)propeller.controls[3]);
         }
     }
-
+    public bool enableLerp = false;
     private void UpdatePosition(Twist pos)
     {
         UnityEngine.Vector3 unity_pos = new UnityEngine.Vector3();
         unity_pos.z = (float)pos.linear.x;
         unity_pos.x = -(float)pos.linear.y;
         unity_pos.y = (float)pos.linear.z;
-        body.transform.position = unity_pos;
+        //body.transform.position = unity_pos;
         //Debug.Log("pos: " + body.transform.position);
 
         float rollDegrees = Mathf.Rad2Deg * (float)pos.angular.x;
         float pitchDegrees = Mathf.Rad2Deg * (float)pos.angular.y;
         float yawDegrees = Mathf.Rad2Deg * (float)pos.angular.z;
 
-        UnityEngine.Quaternion rotation = UnityEngine.Quaternion.Euler(pitchDegrees, -yawDegrees, -rollDegrees);
-        body.transform.rotation = rotation;
+        UnityEngine.Quaternion targetRotation = UnityEngine.Quaternion.Euler(pitchDegrees, -yawDegrees, -rollDegrees);
+        //body.transform.rotation = rotation;
+
+        if (enableLerp)
+        {
+            float speed = 8.0f;
+            float step = speed * Time.deltaTime;
+
+            // 位置をLerp
+            UnityEngine.Vector3 startPosition = this.rd.position;
+            UnityEngine.Vector3 endPosition = unity_pos;
+            this.rd.MovePosition(UnityEngine.Vector3.Lerp(startPosition, endPosition, step));
+
+            // 回転をLerp
+            UnityEngine.Quaternion startRotation = this.rd.rotation;
+            this.rd.MoveRotation(UnityEngine.Quaternion.Lerp(startRotation, targetRotation, step));
+        }
+        else
+        {
+            this.rd.MovePosition(unity_pos);
+            this.rd.MoveRotation(targetRotation);
+        }
+
+
     }
 }
