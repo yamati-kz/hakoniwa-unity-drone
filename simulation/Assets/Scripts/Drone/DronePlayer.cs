@@ -33,8 +33,8 @@ public class DronePlayer : MonoBehaviour, IDroneBatteryStatus, ISimTime
     void Start()
     {
         my_collision = this.GetComponentInChildren<DroneCollision>();
-        if (my_collision == null) {
-            throw new Exception("Can not found collision");
+        if (my_collision != null) {
+            my_collision.SetIndex(0);
         }
         drone_control = this.GetComponentInChildren<DroneControl>();
         if (drone_control == null)
@@ -46,7 +46,6 @@ public class DronePlayer : MonoBehaviour, IDroneBatteryStatus, ISimTime
         {
             Debug.Log("Can not found drone propeller");
         }
-        my_collision.SetIndex(0);
 
         //string droneConfigText = LoadTextFromResources("config/drone/mujoco/drone_config_0");
         //string controllerConfigText = LoadTextFromResources("config/controller/param-api-mixer-mujoco");

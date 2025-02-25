@@ -1,3 +1,4 @@
+using hakoniwa.objects.core;
 using Hakoniwa.DroneService;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class DroneControl : MonoBehaviour
     public double stick_yaw_strength = 1.0;
     private IDroneInput controller_input;
     public bool magnet_on = false;
+    public GameObject grabberObject;
+    private IBaggageGrabber grabber;
 
     public bool IsMagnetOn()
     {
@@ -16,6 +19,16 @@ public class DroneControl : MonoBehaviour
 
     private void Start()
     {
+        if (grabberObject != null)
+        {
+            grabber = grabberObject.GetComponentInChildren<IBaggageGrabber>();
+            Debug.Log("grabber: " + grabber);
+        }
+        else
+        {
+            Debug.Log("Gabber is not found.");
+        }
+
         if (!xr)
         {
             controller_input = HakoDroneInputManager.Instance;
@@ -46,6 +59,17 @@ public class DroneControl : MonoBehaviour
         if (controller_input.IsBButtonReleased())
         {
             magnet_on = IsMagnetOn() ? false : true;
+            if (grabber != null) {
+                if (magnet_on)
+                {
+                    grabber.Grab();
+                }
+                else
+                {
+                    grabber.Release();
+                }
+            }
+
         }
         DroneServiceRC.PutHorizontal(0, horizontal * stick_strength);
         DroneServiceRC.PutForward(0, -forward * stick_strength);
