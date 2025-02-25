@@ -11,8 +11,8 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
 {
     IHakoPdu hakoPdu;
     public string robotName = "Drone";
-    public string pdu_name_propeller = "drone_motor";
-    public string pdu_name_pos = "drone_pos";
+    public string pdu_name_propeller = "motor";
+    public string pdu_name_pos = "pos";
     public GameObject body;
     public Rigidbody rd;
 
@@ -32,7 +32,7 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
         drone_propeller = this.GetComponentInChildren<DronePropeller>();
         if (drone_propeller == null)
         {
-            throw new Exception("Can not found drone propeller");
+            Debug.Log("Can not found drone propeller");
         }
 
 
@@ -93,20 +93,23 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
             UpdatePosition(pos);
         }
 
-        /*
-         * Propeller
-         */
-        IPdu pdu_propeller = pduManager.ReadPdu(robotName, pdu_name_propeller);
-        if (pdu_propeller == null)
-        {
-            Debug.Log("Can not get pdu of propeller");
+        if (drone_propeller) {
+            /*
+             * Propeller
+             */
+            IPdu pdu_propeller = pduManager.ReadPdu(robotName, pdu_name_propeller);
+            if (pdu_propeller == null)
+            {
+                //Debug.Log("Can not get pdu of propeller");
+            }
+            else
+            {
+                HakoHilActuatorControls propeller = new HakoHilActuatorControls(pdu_propeller);
+                Debug.Log("c1: " + propeller.controls[0]);
+                drone_propeller.Rotate((float)propeller.controls[0], (float)propeller.controls[1], (float)propeller.controls[2], (float)propeller.controls[3]);
+            }
         }
-        else
-        {
-            HakoHilActuatorControls propeller = new HakoHilActuatorControls(pdu_propeller);
-            Debug.Log("c1: " + propeller.controls[0]);
-            drone_propeller.Rotate((float)propeller.controls[0], (float)propeller.controls[1], (float)propeller.controls[2], (float)propeller.controls[3]);
-        }
+
     }
     public bool enableLerp = false;
     private void UpdatePosition(Twist pos)

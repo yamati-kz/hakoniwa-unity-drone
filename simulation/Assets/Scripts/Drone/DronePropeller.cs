@@ -3,15 +3,15 @@ using UnityEngine;
 
 public class DronePropeller : MonoBehaviour
 {
-    public GameObject propeller1; // ?v???y??1
-    public GameObject propeller2; // ?v???y??2
-    public GameObject propeller3; // ?v???y??3
-    public GameObject propeller4; // ?v???y??4
+    public GameObject propeller1;
+    public GameObject propeller2;
+    public GameObject propeller3;
+    public GameObject propeller4;
     public GameObject propeller5;
     public GameObject propeller6;
 
     public bool enableAudio = true;
-    public float maxRotationSpeed = 1f; // ???????]???x?i?x/?b?j
+    public float maxRotationSpeed = 1f;
     private AudioSource audioSource;
     public string audio_path;
     public Camera target_camera;
@@ -71,8 +71,14 @@ public class DronePropeller : MonoBehaviour
     {
         RotatePropeller(propeller1, c1);
         RotatePropeller(propeller2, -c2);
-        RotatePropeller(propeller3, c3);
-        RotatePropeller(propeller4, -c4);
+        if (propeller3)
+        {
+            RotatePropeller(propeller3, c3);
+        }
+        if (propeller4)
+        {
+            RotatePropeller(propeller4, -c4);
+        }
         if (propeller5)
         {
             RotatePropeller(propeller5, c1);
