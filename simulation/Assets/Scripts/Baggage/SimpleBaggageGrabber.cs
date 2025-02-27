@@ -6,9 +6,16 @@ namespace hakoniwa.objects.core
     {
         public Magnet magnet;
 
-        public void Grab()
+        public void Grab(bool forceOn)
         {
-            magnet.TurnOn();
+            if (forceOn)
+            {
+                magnet.TurnOnForce();
+            }
+            else
+            {
+                magnet.TurnOn();
+            }
         }
 
         public void Release()

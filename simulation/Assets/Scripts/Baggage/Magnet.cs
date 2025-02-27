@@ -6,6 +6,7 @@ namespace hakoniwa.objects.core
     public class Magnet : MonoBehaviour
     {
         public bool on; // MagnetのOn/Off状態（trueでOn、falseでOff）
+        public bool forceOn = false;
         private Color originalColor; // 元の色を保存
         public Renderer magnetRenderer; // MagnetのRenderer
         public float detectionRange = 0.5f; // 想定距離範囲（Magnetが影響を及ぼす範囲）
@@ -45,6 +46,12 @@ namespace hakoniwa.objects.core
         public void TurnOn()
         {
             on = true;
+            forceOn = false;
+        }
+        public void TurnOnForce()
+        {
+            on = true;
+            forceOn = true;
         }
         public bool TurnOn(Baggage baggage)
         {
@@ -65,6 +72,7 @@ namespace hakoniwa.objects.core
         public void TurnOff()
         {
             on = false;
+            forceOn = false;
         }
         /// <summary>
         /// 荷物を掴んでいるかどうか
@@ -87,8 +95,13 @@ namespace hakoniwa.objects.core
 
             foreach (Baggage baggage in baggages)
             {
+                bool isFree = baggage.IsFree();
+                if (forceOn)
+                {
+                    isFree = true;
+                }
                 // 掴まれていない状態かつ、自分より下に位置しているBaggageのみを対象とする
-                if (baggage.IsFree() && baggage.transform.position.y < this.transform.position.y)
+                if (isFree && baggage.transform.position.y < this.transform.position.y)
                 {
                     float distance = Vector3.Distance(transform.position, baggage.transform.position); // 自分とBaggage間の距離を計算
                     if (distance < nearestDistance) // 距離が現在の最短距離よりも短い場合
@@ -120,8 +133,13 @@ namespace hakoniwa.objects.core
 
             foreach (Baggage baggage in baggages)
             {
+                bool isFree = baggage.IsFree();
+                if (forceOn)
+                {
+                    isFree = true;
+                }
                 // 掴まれていない状態かつ、自分より下に位置しているBaggageのみを対象とする
-                if (baggage.IsFree() && baggage.transform.position.y < this.transform.position.y)
+                if (isFree && baggage.transform.position.y < this.transform.position.y)
                 {
                     float distance = Vector3.Distance(transform.position, baggage.transform.position); // 自分とBaggage間の距離を計算
                     if (distance < nearestDistance) // 距離が現在の最短距離よりも短い場合

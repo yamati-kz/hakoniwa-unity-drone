@@ -1,4 +1,5 @@
 using System;
+using hakoniwa.objects.core;
 using hakoniwa.pdu.interfaces;
 using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.pdu.msgs.hako_mavlink_msgs;
@@ -13,8 +14,11 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
     public string robotName = "Drone";
     public string pdu_name_propeller = "motor";
     public string pdu_name_pos = "pos";
+    public string pdu_name_touch_sensor = "baggage_sensor";
     public GameObject body;
     public Rigidbody rd;
+    public bool useTouchSensor;
+    private TouchSensor touchSensor;
 
     private DronePropeller drone_propeller;
 
@@ -52,6 +56,23 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
         if (ret == false)
         {
             throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_propeller}");
+        }
+        /*
+         * TouchSensor
+         */
+        if (useTouchSensor)
+        {
+            ret = hakoPdu.DeclarePduForWrite(robotName, pdu_name_touch_sensor);
+            if (ret == false)
+            {
+                throw new ArgumentException($"Can not declare pdu for write: {robotName} {pdu_name_touch_sensor}");
+            }
+            touchSensor = this.GetComponentInChildren<TouchSensor>();
+            if (touchSensor == null)
+            {
+                throw new ArgumentException($"Can not find touch sensor: {robotName} {pdu_name_touch_sensor}");
+            }
+
         }
     }
 
@@ -105,9 +126,17 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
             else
             {
                 HakoHilActuatorControls propeller = new HakoHilActuatorControls(pdu_propeller);
-                Debug.Log("c1: " + propeller.controls[0]);
+                //Debug.Log("c1: " + propeller.controls[0]);
                 drone_propeller.Rotate((float)propeller.controls[0], (float)propeller.controls[1], (float)propeller.controls[2], (float)propeller.controls[3]);
             }
+        }
+        if (touchSensor)
+        {
+            INamedPdu pdu_touch_sensor = pduManager.CreateNamedPdu(robotName, pdu_name_touch_sensor);
+            hakoniwa.pdu.msgs.std_msgs.Bool is_touched = new hakoniwa.pdu.msgs.std_msgs.Bool(pdu_touch_sensor);
+            is_touched.data = touchSensor.IsTouched();
+            pduManager.WriteNamedPdu(pdu_touch_sensor);
+            pduManager.FlushNamedPdu(pdu_touch_sensor);
         }
 
     }

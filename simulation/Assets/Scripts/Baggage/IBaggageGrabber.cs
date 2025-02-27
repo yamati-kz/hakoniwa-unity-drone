@@ -4,7 +4,7 @@ namespace hakoniwa.objects.core
 {
     public interface IBaggageGrabber
     {
-        public void Grab();
+        public void Grab(bool forceOn);
         public void Release();
     }
 }

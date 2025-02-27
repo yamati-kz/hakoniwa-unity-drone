@@ -32,7 +32,7 @@
                 {
                     "type": "hako_mavlink_msgs/HakoHilActuatorControls",
                     "org_name": "motor",
-                    "name": "Drone_motor",
+                    "name": "Rover_motor",
                     "channel_id": 1,
                     "pdu_size": 112,
                     "write_cycle": 1
@@ -40,13 +40,22 @@
                 {
                     "type": "geometry_msgs/Twist",
                     "org_name": "pos",
-                    "name": "Drone_pos",
+                    "name": "Rover_pos",
                     "channel_id": 0,
                     "pdu_size": 72,
                     "write_cycle": 1
                 }
             ],
-            "shm_pdu_writers": []
+            "shm_pdu_writers": [
+                {
+                    "type": "std_msgs/Bool",
+                    "org_name": "baggage_sensor",
+                    "name": "Rover_baggage_sensor",
+                    "channel_id": 2,
+                    "pdu_size": 28,
+                    "write_cycle": 1
+                }                
+            ]
         }        
     ]
 }

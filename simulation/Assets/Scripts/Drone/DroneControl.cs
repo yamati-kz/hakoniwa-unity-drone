@@ -11,6 +11,7 @@ public class DroneControl : MonoBehaviour
     public bool magnet_on = false;
     public GameObject grabberObject;
     private IBaggageGrabber grabber;
+    public bool forceGrab = false;
 
     public bool IsMagnetOn()
     {
@@ -62,7 +63,7 @@ public class DroneControl : MonoBehaviour
             if (grabber != null) {
                 if (magnet_on)
                 {
-                    grabber.Grab();
+                    grabber.Grab(forceGrab);
                 }
                 else
                 {
