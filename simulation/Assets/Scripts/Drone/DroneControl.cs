@@ -2,8 +2,16 @@ using hakoniwa.objects.core;
 using Hakoniwa.DroneService;
 using UnityEngine;
 
+public enum DroneControlInputType
+{
+    PS4,
+    Xbox,
+    Xr
+}
+
 public class DroneControl : MonoBehaviour
 {
+    public DroneControlInputType input_type;
     public bool xr;
     public double stick_strength = 0.1;
     public double stick_yaw_strength = 1.0;
@@ -30,9 +38,13 @@ public class DroneControl : MonoBehaviour
             Debug.Log("Gabber is not found.");
         }
 
-        if (!xr)
+        if (input_type == DroneControlInputType.PS4)
         {
             controller_input = HakoDroneInputManager.Instance;
+        }
+        else if (input_type == DroneControlInputType.Xbox)
+        {
+            //TODO
         }
         else
         {
