@@ -7,20 +7,20 @@ GRAVITY                 9.81
 PID_ALT_CONTROL_CYCLE   0.0
 PID_ALT_MAX_POWER       9.81
 PID_ALT_THROTTLE_GAIN   1.0
-PID_ALT_MAX_SPD         10.0
+PID_ALT_MAX_SPD         20.0
 
 ## 高度制御のPIDパラメータ
 PID_ALT_Kp              10.0
 PID_ALT_Ki              0.0
-PID_ALT_Kd              10.0
-PID_ALT_SPD_Kp          10.0
+PID_ALT_Kd              5.0
+PID_ALT_SPD_Kp          15.0
 PID_ALT_SPD_Ki          0.0
-PID_ALT_SPD_Kd          10.0
+PID_ALT_SPD_Kd          5.0
 
 # 水平制御
 POS_CONTROL_CYCLE       0.0
 SPD_CONTROL_CYCLE       0.0
-PID_POS_MAX_SPD         30.0
+PID_POS_MAX_SPD         20.0
 
 ## 水平位置制御のPIDパラメータ
 PID_POS_X_Kp            6.0
@@ -47,26 +47,26 @@ PID_POS_MAX_PITCH           15.0
 PID_ROLL_RPM_MAX            1800.0
 PID_PITCH_RPM_MAX           1800.0
 # Ix = 0.0061
-PID_ROLL_TORQUE_MAX 1.149822911
+PID_ROLL_TORQUE_MAX         30.149822911
 # Iy = 0.00653
-PID_PITCH_TORQUE_MAX 1.230876002
+PID_PITCH_TORQUE_MAX        30.230876002
 PID_YAW_TORQUE_MAX 0.2186548487
 
 ## ロール角度とロール角速度制御のPIDパラメータ
-PID_ROLL_Kp             5.5
+PID_ROLL_Kp             5.0
 PID_ROLL_Ki             0.0
 PID_ROLL_Kd             0.0
-PID_ROLL_RATE_Kp 4.0
+PID_ROLL_RATE_Kp        15.0
 PID_ROLL_RATE_Ki 0.0
-PID_ROLL_RATE_Kd 0.1
+PID_ROLL_RATE_Kd        0.2
 
 ## ピッチ角度とピッチ角速度制御のPIDパラメータ
-PID_PITCH_Kp            5.5
+PID_PITCH_Kp            5.0
 PID_PITCH_Ki            0.0
 PID_PITCH_Kd            0.0
-PID_PITCH_RATE_Kp 4.0
+PID_PITCH_RATE_Kp       15.0
 PID_PITCH_RATE_Ki 0.0
-PID_PITCH_RATE_Kd 0.1
+PID_PITCH_RATE_Kd       0.2
 
 ## ヨー角度とヨー角速度制御のPIDパラメータ
 PID_YAW_RPM_MAX         180.0
@@ -81,3 +81,11 @@ PID_YAW_RATE_Kd 0.0
 YAW_DELTA_VALUE_DEG     0.07
 ALT_DELTA_VALUE_M       0.003
 ANGLE_CONTROL_ENABLE        0
+
+
+# フリップコントロール
+
+FLIP_STICK_CHECK_TIME_SEC   0.1
+FLIP_STICK_VALUE            0.09
+FLIP_TARGET_ANGLE           75.0
+FLIP_ROTATION_DEG_SEC       14800.0
