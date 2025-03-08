@@ -13,7 +13,7 @@ PID_ALT_MAX_SPD         20.0
 PID_ALT_Kp              10.0
 PID_ALT_Ki              0.0
 PID_ALT_Kd              5.0
-PID_ALT_SPD_Kp          15.0
+PID_ALT_SPD_Kp          10.0
 PID_ALT_SPD_Ki          0.0
 PID_ALT_SPD_Kd          5.0
 
@@ -56,7 +56,7 @@ PID_YAW_TORQUE_MAX 0.2186548487
 PID_ROLL_Kp             5.0
 PID_ROLL_Ki             0.0
 PID_ROLL_Kd             0.0
-PID_ROLL_RATE_Kp        15.0
+PID_ROLL_RATE_Kp        3.0
 PID_ROLL_RATE_Ki 0.0
 PID_ROLL_RATE_Kd        0.2
 
@@ -64,7 +64,7 @@ PID_ROLL_RATE_Kd        0.2
 PID_PITCH_Kp            5.0
 PID_PITCH_Ki            0.0
 PID_PITCH_Kd            0.0
-PID_PITCH_RATE_Kp       15.0
+PID_PITCH_RATE_Kp       3.0
 PID_PITCH_RATE_Ki 0.0
 PID_PITCH_RATE_Kd       0.2
 
@@ -87,5 +87,9 @@ ANGLE_CONTROL_ENABLE        0
 
 FLIP_STICK_CHECK_TIME_SEC   0.1
 FLIP_STICK_VALUE            0.09
-FLIP_TARGET_ANGLE           75.0
-FLIP_ROTATION_DEG_SEC       14800.0
+
+# フリップ時間
+FLIP_TARGET_TIME_SEC        0.3
+
+# 一定目標角速度時間
+FLIP_CONSTANT_TIME_SEC      0.05

@@ -14,7 +14,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       },
-      "hash": "e1c4b5c0df356a50c344e0ef5ca8c0abd1ebc9ae"
+      "hash": "e7f2a4dfa42d1af28a56b9ac2a4d8ce588757963"
     },
     "com.hakoniwa-lab.hakoniwa-sim": {
       "version": "https://github.com/toppers/hakoniwa-sim-csharp.git",
@@ -24,7 +24,7 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2",
         "com.hakoniwa-lab.hakoniwa-pdu": "https://github.com/toppers/hakoniwa-pdu-csharp.git"
       },
-      "hash": "9a98608a67092b17495dc1e15df27722de1e6d46"
+      "hash": "3d9586145740b87c3e4a3a61d72590bebd75d95d"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.5",
