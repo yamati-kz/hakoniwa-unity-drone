@@ -49,6 +49,42 @@
                     "pdu_size": 72,
                     "write_cycle": 1,
                     "method_type": "SHM"
+                },
+                {
+                    "type": "hako_msgs/HakoDroneCmdTakeoff",
+                    "org_name": "drone_cmd_takeoff",
+                    "name": "Drone_drone_cmd_takeoff",
+                    "channel_id": 6,
+                    "pdu_size": 88,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                },
+                {
+                    "type": "hako_msgs/HakoDroneCmdMove",
+                    "org_name": "drone_cmd_move",
+                    "name": "Drone_drone_cmd_move",
+                    "channel_id": 7,
+                    "pdu_size": 104,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                },
+                {
+                    "type": "hako_msgs/HakoDroneCmdLand",
+                    "org_name": "drone_cmd_land",
+                    "name": "Drone_drone_cmd_land",
+                    "channel_id": 8,
+                    "pdu_size": 88,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                },
+                {
+                    "type": "hako_msgs/GameControllerOperation",
+                    "org_name": "hako_cmd_game",
+                    "name": "Drone_hako_cmd_game",
+                    "channel_id": 9,
+                    "pdu_size": 160,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
                 }
             ],
             "shm_pdu_writers": [
