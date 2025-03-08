@@ -1,11 +1,53 @@
 using UnityEngine;
 using Hakoniwa.DroneService;
 
+public class DroneImpulseCollision
+{
+    public bool collision;
+    public bool isTargetStatic;
+    public Vector3 targetVelocity;
+    public Vector3 targetAngularVelocity;
+    public Vector3 targetEuler;
+    public Vector3 selfContactVector;
+    public Vector3 targetContactVector;
+    public Vector3 targetInertia;
+    public Vector3 normal;
+    public double targetMass;
+    public double restitutionCoefficient;
+
+    public DroneImpulseCollision(DroneImpulseCollision c)
+    {
+        collision = c.collision;
+        isTargetStatic = c.isTargetStatic;
+        targetVelocity = c.targetVelocity;
+        targetAngularVelocity = c.targetAngularVelocity;
+        targetEuler = c.targetEuler;
+        selfContactVector = c.selfContactVector;
+        targetContactVector = c.targetContactVector;
+        targetInertia = c.targetInertia;
+        normal = c.normal;
+        targetMass = c.targetMass;
+        restitutionCoefficient = c.restitutionCoefficient;
+    }
+    public DroneImpulseCollision() { }
+}
+
+
 [RequireComponent(typeof(BoxCollider))]
 public class DroneCollision : MonoBehaviour
 {
     [SerializeField]
     private LayerMask collisionLayer; // 衝突を検出するレイヤー
+    [SerializeField]
+    private bool isHakoniwa = false;
+
+    private DroneImpulseCollision impluse_collision = new DroneImpulseCollision();
+    public DroneImpulseCollision GetImpulseCollision()
+    {
+        DroneImpulseCollision ret =  new DroneImpulseCollision(impluse_collision);
+        impluse_collision.collision = false;
+        return ret;
+    }
 
     public GameObject pos_obj;
 
@@ -31,12 +73,11 @@ public class DroneCollision : MonoBehaviour
         // レイヤーマスクに基づいて対象をフィルタリング
         if (IsLayerInMask(other.gameObject.layer, collisionLayer))
         {
-            //HandleTriggerCollision(other);
             TargetColliderdInfo info = TargetColliderdInfo.GetInfo(other);
             if (info != null)
             {
                 Debug.Log("Info: " + this.pos_obj.name + " collided with " + info.GetName());
-               HandleTriggerImpulseCollision(info, other);
+                HandleTriggerImpulseCollision(info, other);
             }
         }
     }
@@ -94,19 +135,36 @@ public class DroneCollision : MonoBehaviour
 
         Vector3 targetEuler = Vector3.zero;
 
-        DroneServiceRC.PutImpulseByCollision(
-            this.index,
-            info.IsStatic,
-            ConvertToRosVector(targetVelocity),
-            ConvertToRosAngular(targetAngularVelocity),
-            ConvertToRosAngular(targetEuler),
-            ConvertToRosVector(selfContactVector),
-            ConvertToRosVector(targetContactVector),
-            info.Inertia,
-            ConvertToRosVector(normal),
-            info.Mass,
-            info.RestitutionCoefficient
-        );
+        if (isHakoniwa)
+        {
+            impluse_collision.collision = true;
+            impluse_collision.isTargetStatic = info.IsStatic;
+            impluse_collision.targetVelocity = ConvertToRosVector(targetVelocity);
+            impluse_collision.targetAngularVelocity = ConvertToRosAngular(targetAngularVelocity);
+            impluse_collision.targetEuler = ConvertToRosAngular(targetEuler);
+            impluse_collision.selfContactVector = ConvertToRosVector(selfContactVector);
+            impluse_collision.targetContactVector = ConvertToRosVector(targetContactVector);
+            impluse_collision.targetInertia = info.Inertia;
+            impluse_collision.normal = ConvertToRosVector(normal);
+            impluse_collision.targetMass = info.Mass;
+            impluse_collision.restitutionCoefficient = info.RestitutionCoefficient;
+        }
+        else
+        {
+            DroneServiceRC.PutImpulseByCollision(
+                this.index,
+                info.IsStatic,
+                ConvertToRosVector(targetVelocity),
+                ConvertToRosAngular(targetAngularVelocity),
+                ConvertToRosAngular(targetEuler),
+                ConvertToRosVector(selfContactVector),
+                ConvertToRosVector(targetContactVector),
+                info.Inertia,
+                ConvertToRosVector(normal),
+                info.Mass,
+                info.RestitutionCoefficient
+            );
+        }
         Debug.Log($"Impulse collision handled with {other.name}\n" +
           $"Index: {this.index}, IsStatic: {info.IsStatic}\n" +
           $"TargetVelocity: {ConvertToRosVector(targetVelocity)}\n" +
@@ -120,28 +178,6 @@ public class DroneCollision : MonoBehaviour
 
         //Debug.Log($"Impulse collision handled with {other.name}");
     }
-
-    private void HandleTriggerCollision(Collider other)
-    {
-        // コライダーの最も近いポイントを取得
-        Vector3 contactPoint = other.ClosestPoint(this.pos_obj.transform.position);
-        Debug.Log($"Collision detected with {other.name} at {contactPoint}");
-
-        // ワールド座標を ROS 座標に変換
-        Vector3 ros_pos = new Vector3
-        {
-            x = contactPoint.z,
-            z = contactPoint.y,
-            y = -contactPoint.x
-        };
-
-        // 衝突情報を DroneServiceRC に送信
-        DroneServiceRC.PutCollision(this.index, ros_pos.x, ros_pos.y, ros_pos.z, 1.0);
-
-        // デバッグ表示 (衝突点を緑のラインで表示)
-        Debug.DrawRay(contactPoint, Vector3.up * 0.5f, Color.green, 1.0f, false);
-    }
-    
 
     private bool IsLayerInMask(int layer, LayerMask layerMask)
     {

@@ -1,0 +1,67 @@
+{
+    "robots": [
+        {
+            "name": "Drone",
+            "rpc_pdu_readers": [],
+            "rpc_pdu_writers": [],
+            "shm_pdu_readers": [
+                {
+                    "type": "hako_mavlink_msgs/HakoHilActuatorControls",
+                    "org_name": "motor",
+                    "name": "Drone_motor",
+                    "channel_id": 0,
+                    "pdu_size": 112,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                },
+                {
+                    "type": "geometry_msgs/Twist",
+                    "org_name": "pos",
+                    "name": "Drone_pos",
+                    "channel_id": 1,
+                    "pdu_size": 72,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                },
+                {
+                    "type": "hako_msgs/Disturbance",
+                    "org_name": "disturb",
+                    "name": "Drone_disturb",
+                    "channel_id": 3,
+                    "pdu_size": 56,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                },
+                {
+                    "type": "hako_msgs/HakoBatteryStatus",
+                    "org_name": "battery",
+                    "name": "Drone_battery",
+                    "channel_id": 4,
+                    "pdu_size": 56,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                },
+                {
+                    "type": "geometry_msgs/Twist",
+                    "org_name": "velocity",
+                    "name": "Drone_velocity",
+                    "channel_id": 5,
+                    "pdu_size": 72,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                }
+            ],
+            "shm_pdu_writers": [
+                {
+                    "type": "hako_msgs/ImpulseCollision",
+                    "org_name": "impulse",
+                    "name": "Drone_impulse",
+                    "channel_id": 2,
+                    "pdu_size": 216,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                }
+            ]
+        }
+    ]
+}

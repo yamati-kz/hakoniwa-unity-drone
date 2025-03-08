@@ -1,0 +1,7 @@
+﻿RobotName,package_name,type_name,pdu_name,channel_id,read_or_write,pdu_size,io_cycle
+Drone,hako_mavlink_msgs,HakoHilActuatorControls,motor,0,read,88,1
+Drone,geometry_msgs,Twist,pos,1,read,48,1
+Drone,hako_msgs,ImpulseCollision,impulse,2,write,192,1
+Drone,hako_msgs,Disturbance,disturb,3,read,32,1
+Drone,hako_msgs,HakoBatteryStatus,battery,4,read,32,1
+Drone,geometry_msgs,Twist,velocity,5,read,48,1

@@ -15,10 +15,12 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
     public string pdu_name_propeller = "motor";
     public string pdu_name_pos = "pos";
     public string pdu_name_touch_sensor = "baggage_sensor";
+    public string pdu_name_collision = "impulse";
     public GameObject body;
     public Rigidbody rd;
     public bool useTouchSensor;
     private TouchSensor touchSensor;
+    private DroneCollision drone_collision;
 
     private DronePropeller drone_propeller;
 
@@ -38,7 +40,11 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
         {
             Debug.Log("Can not found drone propeller");
         }
-
+        drone_collision = this.GetComponentInChildren<DroneCollision>();
+        if (drone_collision != null)
+        {
+            Debug.Log("collision is attached.");
+        }
 
         hakoPdu = HakoAsset.GetHakoPdu();
         /*
@@ -72,7 +78,17 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
             {
                 throw new ArgumentException($"Can not find touch sensor: {robotName} {pdu_name_touch_sensor}");
             }
-
+        }
+        /*
+         * Collision
+         */
+        if (drone_collision)
+        {
+            ret = hakoPdu.DeclarePduForWrite(robotName, pdu_name_collision);
+            if (ret == false)
+            {
+                throw new ArgumentException($"Can not declare pdu for write: {robotName} {pdu_name_collision}");
+            }
         }
     }
 
@@ -137,6 +153,42 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
             is_touched.data = touchSensor.IsTouched();
             pduManager.WriteNamedPdu(pdu_touch_sensor);
             pduManager.FlushNamedPdu(pdu_touch_sensor);
+        }
+        if (drone_collision)
+        {
+            var col = drone_collision.GetImpulseCollision();
+            if (col.collision)
+            {
+                INamedPdu pdu_col = pduManager.CreateNamedPdu(robotName, pdu_name_collision);
+                hakoniwa.pdu.msgs.hako_msgs.ImpulseCollision impulseCollision = new hakoniwa.pdu.msgs.hako_msgs.ImpulseCollision(pdu_col);
+                impulseCollision.collision = true;
+                impulseCollision.is_target_static = col.isTargetStatic;
+                impulseCollision.restitution_coefficient = col.restitutionCoefficient;
+                impulseCollision.self_contact_vector.x = col.selfContactVector.x;
+                impulseCollision.self_contact_vector.y = col.selfContactVector.y;
+                impulseCollision.self_contact_vector.z = col.selfContactVector.z;
+                impulseCollision.normal.x = col.normal.x;
+                impulseCollision.normal.y = col.normal.y;
+                impulseCollision.normal.z = col.normal.z;
+                impulseCollision.target_contact_vector.x = col.targetContactVector.x;
+                impulseCollision.target_contact_vector.y = col.targetContactVector.y;
+                impulseCollision.target_contact_vector.z = col.targetContactVector.z;
+                impulseCollision.target_velocity.x = col.targetVelocity.x;
+                impulseCollision.target_velocity.y = col.targetVelocity.y;
+                impulseCollision.target_velocity.z = col.targetVelocity.z;
+                impulseCollision.target_angular_velocity.x = col.targetAngularVelocity.x;
+                impulseCollision.target_angular_velocity.y = col.targetAngularVelocity.y;
+                impulseCollision.target_angular_velocity.z = col.targetAngularVelocity.z;
+                impulseCollision.target_euler.x = col.targetEuler.x;
+                impulseCollision.target_euler.y = col.targetEuler.y;
+                impulseCollision.target_euler.z = col.targetEuler.z;
+                impulseCollision.target_inertia.x = col.targetInertia.x;
+                impulseCollision.target_inertia.y = col.targetInertia.y;
+                impulseCollision.target_inertia.z = col.targetInertia.z;
+                impulseCollision.target_mass = col.targetMass;
+                pduManager.WriteNamedPdu(pdu_col);
+                pduManager.FlushNamedPdu(pdu_col);
+            }
         }
 
     }
