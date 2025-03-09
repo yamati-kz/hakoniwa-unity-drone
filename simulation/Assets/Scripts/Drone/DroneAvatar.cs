@@ -23,6 +23,7 @@ public class DroneAvatar : MonoBehaviour, IHakoObject, IDroneBatteryStatus
     private TouchSensor touchSensor;
     private DroneCollision drone_collision;
     private hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus battery_status;
+    private CameraController cameraController;
 
     private DronePropeller drone_propeller;
 
@@ -99,6 +100,14 @@ public class DroneAvatar : MonoBehaviour, IHakoObject, IDroneBatteryStatus
             {
                 throw new ArgumentException($"Can not declare pdu for write: {robotName} {pdu_name_collision}");
             }
+        }
+        /*
+         * Camera
+         */
+        cameraController = this.GetComponentInChildren<CameraController>();
+        if (cameraController)
+        {
+            cameraController.DoInitialize(robotName, hakoPdu);
         }
     }
 
@@ -207,6 +216,13 @@ public class DroneAvatar : MonoBehaviour, IHakoObject, IDroneBatteryStatus
                 pduManager.WriteNamedPdu(pdu_col);
                 pduManager.FlushNamedPdu(pdu_col);
             }
+        }
+        /*
+         * Camera
+         */
+        if(cameraController)
+        {
+            cameraController.DoControl(pduManager);
         }
 
     }
