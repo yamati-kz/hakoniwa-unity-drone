@@ -8,7 +8,7 @@ using hakoniwa.sim;
 using hakoniwa.sim.core;
 using UnityEngine;
 
-public class DroneAvatar : MonoBehaviour, IHakoObject
+public class DroneAvatar : MonoBehaviour, IHakoObject, IDroneBatteryStatus
 {
     IHakoPdu hakoPdu;
     public string robotName = "Drone";
@@ -16,11 +16,13 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
     public string pdu_name_pos = "pos";
     public string pdu_name_touch_sensor = "baggage_sensor";
     public string pdu_name_collision = "impulse";
+    public string pdu_name_battery = "battery";
     public GameObject body;
     public Rigidbody rd;
     public bool useTouchSensor;
     private TouchSensor touchSensor;
     private DroneCollision drone_collision;
+    private hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus battery_status;
 
     private DronePropeller drone_propeller;
 
@@ -62,6 +64,14 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
         if (ret == false)
         {
             throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_propeller}");
+        }
+        /*
+         * Battery
+         */
+        ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_battery);
+        if (ret == false)
+        {
+            throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_battery}");
         }
         /*
          * TouchSensor
@@ -145,6 +155,14 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
                 //Debug.Log("c1: " + propeller.controls[0]);
                 drone_propeller.Rotate((float)propeller.controls[0], (float)propeller.controls[1], (float)propeller.controls[2], (float)propeller.controls[3]);
             }
+        }
+        /*
+         * Battery
+         */
+        IPdu pdu_battery = pduManager.ReadPdu(robotName, pdu_name_battery);
+        if (pdu_battery != null)
+        {
+            battery_status = new hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus(pdu_battery);
         }
         if (touchSensor)
         {
@@ -230,5 +248,51 @@ public class DroneAvatar : MonoBehaviour, IHakoObject
         }
 
 
+    }
+
+    public double get_full_voltage()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.full_voltage;
+        }
+        return 0;
+    }
+
+    public double get_curr_voltage()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.curr_voltage;
+        }
+        return 0;
+    }
+
+    public uint get_status()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.status;
+        }
+        return 0;
+    }
+
+    public uint get_cycles()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.cycles;
+        }
+        return 0;
+
+    }
+
+    public double get_temperature()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.curr_temp;
+        }
+        return 0;
     }
 }
