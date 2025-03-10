@@ -12,6 +12,14 @@ namespace hakoniwa.objects.core
         public float detectionRange = 0.5f; // 想定距離範囲（Magnetが影響を及ぼす範囲）
         private Baggage currentBaggage; // 現在掴んでいるBaggageオブジェクト
 
+        public bool IsMagnetOn()
+        {
+            return on;
+        }
+        public bool IsConntactOn()
+        {
+            return currentBaggage != null;
+        }
         void Start()
         {
             on = false; // 初期状態はOff（Magnetが無効）

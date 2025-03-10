@@ -25,6 +25,8 @@ namespace hakoniwa.drone.sim
         private DroneCollision drone_collision;
         private hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus battery_status;
         private CameraController cameraController;
+        private BaggageGrabber baggageGrabber;
+        private GameController gameController;
 
         private DronePropeller drone_propeller;
 
@@ -103,12 +105,28 @@ namespace hakoniwa.drone.sim
                 }
             }
             /*
+             * GameController
+             */
+            gameController = this.GetComponentInChildren<GameController>();
+            if (gameController)
+            {
+                gameController.DoInitialize(robotName, hakoPdu);
+            }
+            /*
              * Camera
              */
             cameraController = this.GetComponentInChildren<CameraController>();
             if (cameraController)
             {
                 cameraController.DoInitialize(robotName, hakoPdu);
+            }
+            /*
+             * Baggage
+             */
+            baggageGrabber = this.GetComponentInChildren<BaggageGrabber>();
+            if (baggageGrabber)
+            {
+                baggageGrabber.DoInitialize(robotName, hakoPdu);
             }
         }
 
@@ -220,11 +238,25 @@ namespace hakoniwa.drone.sim
                 }
             }
             /*
+             * GameController
+             */
+            if (gameController)
+            {
+                gameController.DoControl(pduManager);
+            }
+            /*
              * Camera
              */
             if (cameraController)
             {
                 cameraController.DoControl(pduManager);
+            }
+            /*
+             * Baggage
+             */
+            if (baggageGrabber)
+            {
+                baggageGrabber.DoControl(pduManager);
             }
 
         }

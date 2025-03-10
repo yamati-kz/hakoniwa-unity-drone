@@ -1,4 +1,5 @@
 using System;
+using hakoniwa.drone.sim;
 using hakoniwa.pdu.interfaces;
 using hakoniwa.pdu.unity;
 using hakoniwa.sim;
@@ -14,11 +15,7 @@ namespace hakoniwa.drone.sim
         public string pdu_name_camera_data = "hako_camera_data";
         public string pdu_name_cmd_camera_move = "hako_cmd_camera_move";
         public string pdu_name_camera_info = "hako_cmd_camera_info";
-        public string pdu_name_cmd_game = "hako_cmd_game";
 
-        public int game_ops_camera_button_index = 2;
-        public int game_ops_camera_move_up_index = 11;
-        public int game_ops_camera_move_down_index = 12;
         public float camera_move_up_deg = -15.0f;
         public float camera_move_down_deg = 90.0f;
         private RenderTexture RenderTextureRef;
@@ -84,11 +81,6 @@ namespace hakoniwa.drone.sim
             {
                 throw new ArgumentException($"Can not declare pdu for write: {robotName} {pdu_name_camera_info}");
             }
-            ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_cmd_game);
-            if (ret == false)
-            {
-                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_cmd_game}");
-            }
         }
         private void WriteCameraDataPdu(IPduManager pduManager)
         {
@@ -146,7 +138,6 @@ namespace hakoniwa.drone.sim
             //Debug.Log("Write done");
         }
 
-
         public void DoControl(IPduManager pduManager)
         {
             /*
@@ -175,18 +166,6 @@ namespace hakoniwa.drone.sim
                 }
             }
             /*
-             * Camera Image Rc request
-             */
-            IPdu pdu_cmd_game_ctrl = pduManager.ReadPdu(robotName, pdu_name_cmd_game);
-            var cmd_game_ctrl = new hakoniwa.pdu.msgs.hako_msgs.GameControllerOperation(pdu_cmd_game_ctrl);
-            bool[] button_array = cmd_game_ctrl.button;
-            if (button_array[this.game_ops_camera_button_index])
-            {
-                Debug.Log("SHOT!!");
-                this.Scan();
-                this.WriteCameraDataPdu(pduManager);
-            }
-            /*
              * Camera Move Request
              */
             IPdu pdu_camera_move = pduManager.ReadPdu(robotName, pdu_name_cmd_camera_move);
@@ -204,36 +183,51 @@ namespace hakoniwa.drone.sim
                 }
             }
 
-            if (button_array[this.game_ops_camera_move_up_index])
+            var controller = GameController.Instance;
+            if (controller)
             {
-                camera_move_button_time_duration += Time.fixedDeltaTime;
-                if (camera_move_button_time_duration > camera_move_button_threshold_speedup)
+                /*
+                 * Camera Image Rc request
+                 */
+                if (controller.GetCameraShotOn())
                 {
-                    RotateCamera(-move_step * 3f);
-                }
-                else
-                {
-                    RotateCamera(-move_step);
+                    Debug.Log("SHOT!!");
+                    this.Scan();
+                    this.WriteCameraDataPdu(pduManager);
                 }
 
+                if (controller.GetCameraMoveUp())
+                {
+                    camera_move_button_time_duration += Time.fixedDeltaTime;
+                    if (camera_move_button_time_duration > camera_move_button_threshold_speedup)
+                    {
+                        RotateCamera(-move_step * 3f);
+                    }
+                    else
+                    {
+                        RotateCamera(-move_step);
+                    }
+
+                }
+
+                if (controller.GetCameraMoveDown())
+                {
+                    camera_move_button_time_duration += Time.fixedDeltaTime;
+                    if (camera_move_button_time_duration > camera_move_button_threshold_speedup)
+                    {
+                        RotateCamera(move_step * 3f);
+                    }
+                    else
+                    {
+                        RotateCamera(move_step);
+                    }
+                }
+                if (!controller.GetCameraMoveDown() && !controller.GetCameraMoveUp())
+                {
+                    camera_move_button_time_duration = 0f;
+                }
             }
 
-            if (button_array[this.game_ops_camera_move_down_index])
-            {
-                camera_move_button_time_duration += Time.fixedDeltaTime;
-                if (camera_move_button_time_duration > camera_move_button_threshold_speedup)
-                {
-                    RotateCamera(move_step * 3f);
-                }
-                else
-                {
-                    RotateCamera(move_step);
-                }
-            }
-            if (!button_array[this.game_ops_camera_move_down_index] && !button_array[this.game_ops_camera_move_up_index])
-            {
-                camera_move_button_time_duration = 0f;
-            }
             if (displayImage != null)
             {
                 displayImage.texture = this.RenderTextureRef;

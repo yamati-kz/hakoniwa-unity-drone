@@ -831,6 +831,68 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554265156}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &567560794
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4459264099945322592}
+    m_Modifications:
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.075
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.075
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7925417626203963432, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+      propertyPath: m_Name
+      value: Magnet
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+--- !u!4 &567560795 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6386286825221839185, guid: 9324874080f344a4287e6a739f39c6bb, type: 3}
+  m_PrefabInstance: {fileID: 567560794}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &596192609
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,7 +905,6 @@ GameObject:
   - component: {fileID: 596192613}
   - component: {fileID: 596192612}
   - component: {fileID: 596192611}
-  - component: {fileID: 596192614}
   m_Layer: 0
   m_Name: simulation
   m_TagString: Untagged
@@ -938,29 +999,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &596192614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 596192609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f34c1cd0af4ac402481923c3a0b1a6e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsStatic: 0
-  Position: {x: 0, y: 0, z: 0}
-  Rotation: {x: 0, y: 0, z: 0, w: 0}
-  Velocity: {x: 0, y: 0, z: 0}
-  AngularVelocity: {x: 0, y: 0, z: 0}
-  Euler: {x: 0, y: 0, z: 0}
-  Inertia: {x: 1, y: 1, z: 1}
-  Mass: 1
-  RestitutionCoefficient: 0.5
-  rb: {fileID: 0}
-  collider_obj: {fileID: 0}
 --- !u!1 &600218769
 GameObject:
   m_ObjectHideFlags: 0
@@ -1990,10 +2028,6 @@ MonoBehaviour:
   pdu_name_camera_data: hako_camera_data
   pdu_name_cmd_camera_move: hako_cmd_camera_move
   pdu_name_camera_info: hako_cmd_camera_info
-  pdu_name_cmd_game: hako_cmd_game
-  game_ops_camera_button_index: 2
-  game_ops_camera_move_up_index: 11
-  game_ops_camera_move_down_index: 12
   camera_move_up_deg: -15
   camera_move_down_deg: 90
   width: 640
@@ -2205,7 +2239,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1fc7e373ee8a94c7a866f2880986c0b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7744,6 +7778,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 567560795}
   - {fileID: 1647239014}
   - {fileID: 4345471249185182796}
   - {fileID: 5134875662518571995}
@@ -12454,6 +12489,8 @@ GameObject:
   - component: {fileID: 1378977566032385080}
   - component: {fileID: 7904090847923852765}
   - component: {fileID: 5277710497428945649}
+  - component: {fileID: 8622355723143569079}
+  - component: {fileID: 8622355723143569080}
   m_Layer: 0
   m_Name: AvatarSimpleDrone
   m_TagString: Untagged
@@ -12461,6 +12498,33 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8622355723143569079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8622355723143569078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4e0b013fdca84e7faf2d0a2301972ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pdu_name_cmd_magnet: hako_cmd_magnet_holder
+  pdu_name_status_magnet: hako_status_magnet_holder
+--- !u!114 &8622355723143569080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8622355723143569078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abfffcb5398914bb39b89db3f58ed6b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pdu_name_cmd_game: hako_cmd_game
 --- !u!4 &8635737091318663943
 Transform:
   m_ObjectHideFlags: 0
