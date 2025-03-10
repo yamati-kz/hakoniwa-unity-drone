@@ -51,7 +51,7 @@ namespace hakoniwa.drone.sim
                 }
             }
             var controller = GameController.Instance;
-            if (controller)
+            if (controller && controller.GetRadioControlOn())
             {
                 if (controller.GetGrabBaggageOn())
                 {

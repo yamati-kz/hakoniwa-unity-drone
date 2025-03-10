@@ -184,7 +184,7 @@ namespace hakoniwa.drone.sim
             }
 
             var controller = GameController.Instance;
-            if (controller)
+            if (controller && controller.GetRadioControlOn())
             {
                 /*
                  * Camera Image Rc request

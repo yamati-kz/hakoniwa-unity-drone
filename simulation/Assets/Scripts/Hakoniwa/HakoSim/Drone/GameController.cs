@@ -21,6 +21,8 @@ namespace hakoniwa.drone.sim
                 Destroy(gameObject);
             }
         }
+        private bool is_radio_control = false;
+        private int game_ops_arm_button_index = 0;
         private int game_ops_grab_baggage_button_index = 1;
         private int game_ops_camera_button_index = 2;
         private int game_ops_camera_move_up_index = 11;
@@ -46,7 +48,10 @@ namespace hakoniwa.drone.sim
         {
             return button_array[game_ops_camera_move_down_index];
         }
-
+        public bool GetRadioControlOn()
+        {
+            return is_radio_control;
+        }
 
         public void DoInitialize(string robot_name, IHakoPdu hakoPdu)
         {
@@ -68,7 +73,11 @@ namespace hakoniwa.drone.sim
                 for (int i = 0; i < cmd_game_ctrl.button.Length; i++)
                 {
                     button_array[i] = cmd_game_ctrl.button[i];
-                    Debug.Log($"Button[{i}] = {button_array[i]}");
+                    //Debug.Log($"Button[{i}] = {button_array[i]}");
+                }
+                if (button_array[this.game_ops_arm_button_index])
+                {
+                    is_radio_control = true;
                 }
             }
         }
