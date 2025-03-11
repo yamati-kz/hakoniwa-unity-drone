@@ -27,6 +27,8 @@ namespace hakoniwa.drone.sim
         private CameraController cameraController;
         private BaggageGrabber baggageGrabber;
         private GameController gameController;
+        private DroneConfig droneConfig;
+        private LiDAR3DController[] lidars;
 
         private DronePropeller drone_propeller;
 
@@ -127,6 +129,29 @@ namespace hakoniwa.drone.sim
             if (baggageGrabber)
             {
                 baggageGrabber.DoInitialize(robotName, hakoPdu);
+            }
+            /*
+             * Drone Config
+             */
+            droneConfig = this.GetComponentInChildren<DroneConfig>();
+            if (droneConfig)
+            {
+                droneConfig.LoadDroneConfig(robotName);
+            }
+            /*
+             * LiDAR
+             */
+            lidars = this.GetComponentsInChildren<LiDAR3DController>();
+            if (lidars != null)
+            {
+                if (droneConfig)
+                {
+                    droneConfig.SetLidarPosition(robotName);
+                }
+                foreach(var lidar in lidars)
+                {
+                    lidar.DoInitialize(robotName, hakoPdu);
+                }
             }
         }
 
@@ -258,7 +283,16 @@ namespace hakoniwa.drone.sim
             {
                 baggageGrabber.DoControl(pduManager);
             }
-
+            /*
+             * LiDAR
+             */
+            if (lidars != null)
+            {
+                foreach(var lidar in lidars)
+                {
+                    lidar.DoControl(pduManager);
+                }
+            }
         }
         public bool enableLerp = false;
         private void UpdatePosition(Twist pos)

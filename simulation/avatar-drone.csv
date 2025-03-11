@@ -15,5 +15,5 @@ Drone,hako_msgs,HakoCameraData,hako_camera_data,12,write,1002968,1
 Drone,hako_msgs,HakoCameraInfo,hako_cmd_camera_info,13,write,32,1
 Drone,hako_msgs,HakoCmdMagnetHolder,hako_cmd_magnet_holder,14,read,16,1
 Drone,hako_msgs,HakoStatusMagnetHolder,hako_status_magnet_holder,15,write,8,1
-Drone,sensor_msgs,PointCloud2,lidar_points,16,read,177400,1
-Drone,geometry_msgs,Twist,lidar_pos,17,read,48,1
+Drone,sensor_msgs,PointCloud2,lidar_points,16,write,177400,1
+Drone,geometry_msgs,Twist,lidar_pos,17,write,48,1
