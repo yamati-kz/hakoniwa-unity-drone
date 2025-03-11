@@ -5,7 +5,7 @@
             "audio_rotor_path": "xxx",
             "LiDARs": {
                 "LiDAR": {
-                    "Enabled": true,
+                    "Enabled": false,
                     "NumberOfChannels": 16,
                     "RotationsPerSecond": 10,
                     "PointsPerSecond": 10000,
