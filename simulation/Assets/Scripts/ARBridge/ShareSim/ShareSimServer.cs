@@ -30,6 +30,11 @@ namespace hakoniwa.ar.bridge.sharesim
         public void EventInitialize()
         {
             hakoPdu = HakoAsset.GetHakoPdu();
+            Debug.Log("HakoPdu: " + hakoPdu);
+            if (hakoPdu == null)
+            {
+                throw new ArgumentException($"Can not find hakoPdu: {robotName} {pduRequest}");
+            }
             /*
              * req
              */
