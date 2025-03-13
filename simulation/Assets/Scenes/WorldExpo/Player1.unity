@@ -593,6 +593,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4813626397102924058, guid: f29b1af6edaacdc45899d1c868f5679b, type: 3}
   m_PrefabInstance: {fileID: 1603630731}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1614013530 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 95481259887700932, guid: d55256063640d714fb9905a0f52ef502, type: 3}
+  m_PrefabInstance: {fileID: 1838616694}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bf2b0e366d9412c8343a79587d8113, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1838616694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -698,6 +709,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2970190585736629634, guid: b93e70b306d2cfc48acddee97823fb3b, type: 3}
+      propertyPath: 'owners.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1614013530}
     - target: {fileID: 6710010510310321625, guid: b93e70b306d2cfc48acddee97823fb3b, type: 3}
       propertyPath: m_Name
       value: ShareSimClient
