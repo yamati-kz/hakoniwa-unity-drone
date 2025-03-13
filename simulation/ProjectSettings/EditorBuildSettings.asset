@@ -9,5 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SimpleFlightTest.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 100b3a3147b1d3d4bb6442a4a3572277, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 08bb70a8cca0e4a0d8a347fdf332c051, type: 3}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 0556ec1fde627364c8eb167b94826267, type: 2}
   m_UseUCBPForAssetBundles: 0

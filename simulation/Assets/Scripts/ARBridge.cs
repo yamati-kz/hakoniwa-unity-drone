@@ -140,7 +140,7 @@ public class ARBridge : MonoBehaviour, IHakoniwaArBridgePlayer, IHakoPduInstance
         }
         if (xr)
         {
-            //TODO drone_input = HakoDroneXrInputManager.Instance;
+            drone_input = HakoDroneXrInputManager.Instance;
         }
         else
         {

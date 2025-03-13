@@ -14,7 +14,6 @@ namespace hakoniwa.drone
     public class DroneControl : MonoBehaviour
     {
         public DroneControlInputType input_type;
-        public bool xr;
         public double stick_strength = 0.1;
         public double stick_yaw_strength = 1.0;
         private IDroneInput controller_input;
@@ -50,7 +49,7 @@ namespace hakoniwa.drone
             }
             else
             {
-                //TODO
+                controller_input = HakoDroneXrInputManager.Instance;
             }
         }
 
