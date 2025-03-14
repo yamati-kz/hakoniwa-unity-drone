@@ -128,7 +128,7 @@ python -m server.main --asset_name WebServer --config_path ..\simulation\sharesi
 
 実行例：
 ```
-PS E:\project\temp\hakoniwa-webserver> python -m server.main --asset_name WebServer --config_path .\config\custom.json --delta_time_usec 20000
+PS E:\project\temp\hakoniwa-webserver> python -m server.main --asset_name WebServer --config_path ..\simulation\sharesim-drone.json --delta_time_usec 20000
 INFO: start http server
 INFO: start websocket server
 run webserver
