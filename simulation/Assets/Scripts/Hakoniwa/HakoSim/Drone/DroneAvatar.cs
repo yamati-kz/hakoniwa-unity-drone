@@ -18,6 +18,7 @@ namespace hakoniwa.drone.sim
         public string pdu_name_touch_sensor = "baggage_sensor";
         public string pdu_name_collision = "impulse";
         public string pdu_name_battery = "battery";
+        public bool useBattery = true;
         public GameObject body;
         public Rigidbody rd;
         public bool useTouchSensor;
@@ -74,10 +75,13 @@ namespace hakoniwa.drone.sim
             /*
              * Battery
              */
-            ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_battery);
-            if (ret == false)
+            if (useBattery)
             {
-                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_battery}");
+                ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_battery);
+                if (ret == false)
+                {
+                    throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_battery}");
+                }
             }
             /*
              * TouchSensor
@@ -213,11 +217,15 @@ namespace hakoniwa.drone.sim
             /*
              * Battery
              */
-            IPdu pdu_battery = pduManager.ReadPdu(robotName, pdu_name_battery);
-            if (pdu_battery != null)
+            if (useBattery)
             {
-                battery_status = new hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus(pdu_battery);
+                IPdu pdu_battery = pduManager.ReadPdu(robotName, pdu_name_battery);
+                if (pdu_battery != null)
+                {
+                    battery_status = new hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus(pdu_battery);
+                }
             }
+
             if (touchSensor)
             {
                 INamedPdu pdu_touch_sensor = pduManager.CreateNamedPdu(robotName, pdu_name_touch_sensor);

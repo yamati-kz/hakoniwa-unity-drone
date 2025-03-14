@@ -265,6 +265,7 @@ MonoBehaviour:
   pdu_name_touch_sensor: baggage_sensor
   pdu_name_collision: impulse
   pdu_name_battery: battery
+  useBattery: 0
   body: {fileID: 182990390}
   rd: {fileID: 4534350930978857167}
   useTouchSensor: 0
@@ -455,6 +456,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DJIAvatar2
       objectReference: {fileID: 0}
+    - target: {fileID: 8005107413643532693, guid: 8d12dee04f365427ea56c937bab2d4e7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8151914189715544101, guid: 8d12dee04f365427ea56c937bab2d4e7, type: 3}
       propertyPath: maxRotationSpeed
       value: 36000
@@ -547,6 +552,7 @@ MonoBehaviour:
   pdu_name_touch_sensor: baggage_sensor
   pdu_name_collision: impulse
   pdu_name_battery: battery
+  useBattery: 0
   body: {fileID: 855324456}
   rd: {fileID: 855324457}
   useTouchSensor: 0
@@ -654,7 +660,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   assetName: UnityAsset
   pduConfigPath: .
-  customJsonFilePath: ./sharesim-drone.json
+  customJsonFilePath: sharesim-drone.json
   hakoObjects:
   - {fileID: 182990390}
   - {fileID: 855324456}
@@ -1220,6 +1226,10 @@ PrefabInstance:
     - target: {fileID: 7008344486161400641, guid: 8d12dee04f365427ea56c937bab2d4e7, type: 3}
       propertyPath: m_Name
       value: DJIAvatar1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8005107413643532693, guid: 8d12dee04f365427ea56c937bab2d4e7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8151914189715544101, guid: 8d12dee04f365427ea56c937bab2d4e7, type: 3}
       propertyPath: maxRotationSpeed
