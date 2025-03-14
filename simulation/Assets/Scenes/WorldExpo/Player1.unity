@@ -390,6 +390,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7841268552636900009, guid: 1e0c7a4c92ead924e92e25899b338622, type: 3}
+      propertyPath: maxDistance
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7841268552636900009, guid: 1e0c7a4c92ead924e92e25899b338622, type: 3}
       propertyPath: target_camera
       value: 
       objectReference: {fileID: 4305234138305935792}
