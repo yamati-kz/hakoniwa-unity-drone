@@ -84,9 +84,10 @@ ANGLE_CONTROL_ENABLE        0
 
 
 # フリップコントロール
+FLIP_CONTROL_ENABLE         0
 
 FLIP_STICK_CHECK_TIME_SEC   0.1
-FLIP_STICK_VALUE            0.09
+FLIP_STICK_VALUE            0.04
 
 # フリップ時間
 FLIP_TARGET_TIME_SEC        0.3

@@ -19,8 +19,8 @@ namespace hakoniwa.drone
         public string debug_logpath = null;
 
         public string robotName = "Drone";
-        public string pdu_name_propeller = "drone_motor";
-        public string pdu_name_pos = "drone_pos";
+        public string pdu_name_propeller = "motor";
+        public string pdu_name_pos = "pos";
 
         private void SetPosition(Twist pos, UnityEngine.Vector3 unity_pos, UnityEngine.Vector3 unity_rot)
         {
@@ -54,7 +54,7 @@ namespace hakoniwa.drone
             //string droneConfigText = LoadTextFromResources("config/drone/mujoco/drone_config_0");
             //string controllerConfigText = LoadTextFromResources("config/controller/param-api-mixer-mujoco");
             string droneConfigText = LoadTextFromResources("config/drone/rc/drone_config_0");
-            string filename = "org" + "-param-api-mixer";
+            string filename = "param-api-mixer";
             string controllerConfigText = LoadTextFromResources("config/controller/" + filename);
 
             if (string.IsNullOrEmpty(droneConfigText))
