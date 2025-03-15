@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/WorldExpo/Player2.unity
+    guid: 3e047edb6bcd71441b204ac046101d27
+  - enabled: 0
     path: Assets/Scenes/WorldExpo/Player1.unity
     guid: 13307426737984d47acb2add797b6592
   m_configObjects:

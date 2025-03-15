@@ -103,22 +103,37 @@ public class ARBridge : MonoBehaviour, IHakoniwaArBridgePlayer, IHakoPduInstance
     {
         Vector2 left_value;
         Vector2 right_value;
-        left_value = drone_input.GetLeftStickInput();
-        right_value = drone_input.GetRightStickInput();
+        left_value = - drone_input.GetLeftStickInput();
+        right_value = - drone_input.GetRightStickInput();
 
         float deltaTime = Time.fixedDeltaTime;
 
-        // 移動計算（速度を考慮）
-        base_pos.x += right_value.x * moveSpeed * deltaTime;
-        base_pos.y += left_value.y * moveSpeed * deltaTime;
-        base_pos.z += right_value.y * moveSpeed * deltaTime;
+        // 現在の回転角度（度数法からラジアンに変換）
+        float angleY = base_rot.y * Mathf.Deg2Rad;
+
+        // 前後移動
+        Vector3 forward = new Vector3(Mathf.Sin(angleY), 0, Mathf.Cos(angleY));
+        Vector3 right = new Vector3(Mathf.Cos(angleY), 0, -Mathf.Sin(angleY));
+
+        // 移動計算（回転を考慮）
+        Vector3 moveDelta = forward * right_value.y * moveSpeed * deltaTime
+                          + right * right_value.x * moveSpeed * deltaTime
+                          + Vector3.up * left_value.y * moveSpeed * deltaTime;
+
+        // 浮動小数点誤差による不要なドリフトを防ぐ
+        if (!Mathf.Approximately(moveDelta.magnitude, 0f))
+        {
+            base_pos += moveDelta;
+        }
 
         // 回転計算（速度を考慮）
-        base_rot.y += left_value.x * rotationSpeed * deltaTime;
+        base_rot.y = Mathf.Repeat(base_rot.y + left_value.x * rotationSpeed * deltaTime, 360f);
+
+        // 更新
         base_object.transform.position = base_pos;
         base_object.transform.eulerAngles = base_rot;
-
     }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
