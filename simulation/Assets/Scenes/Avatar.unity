@@ -1158,7 +1158,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &737527946
 Transform:
   m_ObjectHideFlags: 0
@@ -1420,7 +1420,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e19f07a998bbd4254b48e54ac9e254a4, type: 2}
+  - {fileID: 2100000, guid: 6c2c89ee52c0a4508bfd8bfd82bb1460, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1618,7 +1618,7 @@ Transform:
   m_GameObject: {fileID: 1058579461}
   serializedVersion: 2
   m_LocalRotation: {x: 0.05382117, y: -0, z: -0, w: 0.9985506}
-  m_LocalPosition: {x: 0.03, y: -0.01, z: -1.62}
+  m_LocalPosition: {x: 0.03, y: 0.6, z: -3.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2278,6 +2278,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 787516ffc23754c41a399218b674e2fd, type: 3}
       propertyPath: m_Name
       value: Turtlebot3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 787516ffc23754c41a399218b674e2fd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6305,7 +6309,7 @@ Transform:
   m_GameObject: {fileID: 8622355723143569078}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.075, y: 0.02, z: -0.075}
+  m_LocalPosition: {x: 0, y: 0.02, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8920,6 +8924,7 @@ MonoBehaviour:
   pdu_name_touch_sensor: baggage_sensor
   pdu_name_collision: impulse
   pdu_name_battery: battery
+  useBattery: 1
   body: {fileID: 3103511000175885458}
   rd: {fileID: 368914115}
   useTouchSensor: 0
