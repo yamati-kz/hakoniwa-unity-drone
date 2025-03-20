@@ -1,0 +1,174 @@
+{
+    "pdu_path": "./custom.json",
+    "monitor_cameras": [
+        {
+            "pdu_info": {
+                "robot_name": "BL"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": -1.5,
+                    "y": 1.5,
+                    "z": 1
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 10,
+                    "yaw": -45
+                }
+            },
+            "fov": {
+                "horizontal": 30,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "trigger_type": "external"
+        },
+        {
+            "pdu_info": {
+                "robot_name": "BR"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": -1.5,
+                    "y": -1.5,
+                    "z": 1
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 10,
+                    "yaw": 45
+                }
+            },
+            "fov": {
+                "horizontal": 30,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "trigger_type": "external"
+        },        
+        {
+            "pdu_info": {
+                "robot_name": "FR"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": 1.5,
+                    "y": -1.5,
+                    "z": 1
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 10,
+                    "yaw": 135
+                }
+            },
+            "fov": {
+                "horizontal": 30,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "trigger_type": "external"
+        },
+        {
+            "pdu_info": {
+                "robot_name": "FL"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "z": 1
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 10,
+                    "yaw": -135
+                }
+            },
+            "fov": {
+                "horizontal": 30,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "trigger_type": "external"
+        },        
+        {
+            "pdu_info": {
+                "robot_name": "TOP"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 4
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 90,
+                    "yaw": 0
+                }
+            },
+            "fov": {
+                "horizontal": 60,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "trigger_type": "external"
+        },
+        {
+            "pdu_info": {
+                "robot_name": "Movable"
+            },
+            "coordinate_system": {
+                "type": "local",
+                "target": "DJIAvatar",
+                "position": {
+                    "x": -0.4,
+                    "y": 0,
+                    "z": 0.1
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 20,
+                    "yaw": 0
+                }
+            },
+            "fov": {
+                "horizontal": 30,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "trigger_type": "external"
+        }
+    ]
+}

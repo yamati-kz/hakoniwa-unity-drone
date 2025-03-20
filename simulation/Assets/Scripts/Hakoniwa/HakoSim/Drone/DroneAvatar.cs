@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace hakoniwa.drone.sim
 {
-    public class DroneAvatar : MonoBehaviour, IHakoObject, IDroneBatteryStatus
+    public class DroneAvatar : MonoBehaviour, IHakoObject, IDroneBatteryStatus, IMovableObject
     {
         IHakoPdu hakoPdu;
         public string robotName = "Drone";
@@ -386,6 +386,16 @@ namespace hakoniwa.drone.sim
                 return battery_status.curr_temp;
             }
             return 0;
+        }
+
+        UnityEngine.Vector3 IMovableObject.GetPosition()
+        {
+            return this.body.transform.position;
+        }
+
+        UnityEngine.Vector3 IMovableObject.GetEulerDeg()
+        {
+            return this.body.transform.eulerAngles;
         }
     }
 }

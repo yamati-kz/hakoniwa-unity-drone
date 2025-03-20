@@ -17,8 +17,21 @@
                     "HorizontalFOVStart": -5,
                     "HorizontalFOVEnd": 5,
                     "DrawDebugPoints": true
-                }
-            }
+                },
+                "DJIAvatarLiDAR": {
+                    "Enabled": false,
+                    "NumberOfChannels": 16,
+                    "RotationsPerSecond": 10,
+                    "PointsPerSecond": 10000,
+                    "MaxDistance": 10,
+                    "X": 0.0865, "Y": 0.0, "Z": -0.03259,
+                    "Roll": 0, "Pitch": 0, "Yaw" : 0,
+                    "VerticalFOVUpper": 5,
+                    "VerticalFOVLower": -5,
+                    "HorizontalFOVStart": -5,
+                    "HorizontalFOVEnd": 5,
+                    "DrawDebugPoints": true
+                }            }
         }
     }
 }
