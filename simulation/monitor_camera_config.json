@@ -1,9 +1,9 @@
 {
-    "pdu_path": "./custom.json",
+    "pdu_path": "./safety-pdu.json",
     "monitor_cameras": [
         {
             "pdu_info": {
-                "robot_name": "BL"
+                "robot_name": "Monitor_BL"
             },
             "coordinate_system": {
                 "type": "global",
@@ -27,11 +27,12 @@
                 "height": 480
             },
             "camera_type": "RGB",
+            "encode_type": "png",
             "trigger_type": "external"
         },
         {
             "pdu_info": {
-                "robot_name": "BR"
+                "robot_name": "Monitor_BR"
             },
             "coordinate_system": {
                 "type": "global",
@@ -55,11 +56,12 @@
                 "height": 480
             },
             "camera_type": "RGB",
+            "encode_type": "png",
             "trigger_type": "external"
         },        
         {
             "pdu_info": {
-                "robot_name": "FR"
+                "robot_name": "Monitor_FR"
             },
             "coordinate_system": {
                 "type": "global",
@@ -83,11 +85,12 @@
                 "height": 480
             },
             "camera_type": "RGB",
+            "encode_type": "png",
             "trigger_type": "external"
         },
         {
             "pdu_info": {
-                "robot_name": "FL"
+                "robot_name": "Monitor_FL"
             },
             "coordinate_system": {
                 "type": "global",
@@ -111,11 +114,12 @@
                 "height": 480
             },
             "camera_type": "RGB",
+            "encode_type": "png",
             "trigger_type": "external"
         },        
         {
             "pdu_info": {
-                "robot_name": "TOP"
+                "robot_name": "Monitor_TOP"
             },
             "coordinate_system": {
                 "type": "global",
@@ -139,11 +143,12 @@
                 "height": 480
             },
             "camera_type": "RGB",
+            "encode_type": "png",
             "trigger_type": "external"
         },
         {
             "pdu_info": {
-                "robot_name": "Movable"
+                "robot_name": "Monitor_Movable"
             },
             "coordinate_system": {
                 "type": "local",
@@ -168,6 +173,7 @@
                 "height": 480
             },
             "camera_type": "RGB",
+            "encode_type": "png",
             "trigger_type": "external"
         }
     ]

@@ -6,64 +6,58 @@ namespace hakoniwa.objects.core.sensors
 {
     public class MonitorCameraManager : MonoBehaviour
     {
+        public static MonitorCameraManager Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            hakoCameras = new Dictionary<string, HakoCamera>();  // ここで初期化
+            SetCameras();
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
         public string monitorCameraConfigPath = "./monitor_camera_config.json";
         public GameObject cameraPrefab;
-        private List<HakoCamera> hakoCameras;
-        private bool isReady = false;
-        public bool IsReady()
-        {
-            return isReady;
-        }
+        private Dictionary<string, HakoCamera> hakoCameras;
+
         public List<string> GetCameraNames()
         {
-            if (isReady)
-            {
-                List<string> cameraNames = new List<string>();
-                foreach (var camera in hakoCameras)
-                {
-                    cameraNames.Add(camera.name);
-                }
-                return cameraNames;
-            }
-            else
-            {
-                return null;
-            }
+            return new List<string>(hakoCameras.Keys);
         }
+
         public RenderTexture GetCameraRenderTexture(string cameraName)
         {
-            if (isReady)
+            if (hakoCameras.TryGetValue(cameraName, out var camera))
             {
-                foreach (var camera in hakoCameras)
-                {
-                    if (camera.name == cameraName)
-                    {
-                        return camera.GetRenderTexture();
-                    }
-                }
+                return camera.GetRenderTexture();
+            }
+            return null;
+        }
+        public string GetEncodeType(string cameraName)
+        {
+            if (hakoCameras.TryGetValue(cameraName, out var camera))
+            {
+                return camera.GetEncodeType();
             }
             return null;
         }
         public (Vector3 position, Vector3 rotation, float fov) GetCameraInfo(string cameraName)
         {
-            if (isReady)
+            if (hakoCameras.TryGetValue(cameraName, out var camera))
             {
-                foreach (var camera in hakoCameras)
-                {
-                    if (camera.name == cameraName)
-                    {
-                        return (camera.transform.position, camera.transform.eulerAngles, camera.GetFov());
-                    }
-                }
+                return (camera.transform.position, camera.transform.eulerAngles, camera.GetFov());
             }
             return (Vector3.zero, Vector3.zero, 0);
         }
 
-        void Start()
-        {
-            SetCameras();
-            isReady = true;
-        }
+
         public void ReloadCameras()
         {
             RemoveCamers();
@@ -71,17 +65,14 @@ namespace hakoniwa.objects.core.sensors
         }
         private void RemoveCamers()
         {
-            if (hakoCameras != null)
+            foreach (var hakoCamera in hakoCameras.Values)
             {
-                foreach (var hakoCamera in hakoCameras)
+                if (hakoCamera != null)
                 {
-                    if (hakoCamera != null)
-                    {
-                        Destroy(hakoCamera.gameObject);
-                    }
+                    Destroy(hakoCamera.gameObject);
                 }
-                hakoCameras.Clear();
             }
+            hakoCameras.Clear();
         }
         private void SetCameras()
         {
@@ -92,34 +83,48 @@ namespace hakoniwa.objects.core.sensors
                 Debug.LogError("Failed to load camera configuration.");
                 return;
             }
-            hakoCameras = new List<HakoCamera>();
+            if (cameraPrefab == null)
+            {
+                Debug.LogError("Camera prefab is not set.");
+                return;
+            }
             foreach (var camData in cameraConfig.monitor_cameras)
             {
                 GameObject newCamera = Instantiate(cameraPrefab);
                 HakoCamera hakoCamera = newCamera.GetComponent<HakoCamera>();
 
-                if (hakoCamera != null)
+                if (hakoCamera == null)
                 {
-                    newCamera.transform.SetParent(this.transform);
-                    newCamera.transform.name = camData.pdu_info.robot_name;
-                    Vector3 position = new Vector3(camData.coordinate_system.position.x, camData.coordinate_system.position.y, camData.coordinate_system.position.z);
-                    Vector3 rotation = new Vector3(camData.coordinate_system.orientation.roll, camData.coordinate_system.orientation.pitch, camData.coordinate_system.orientation.yaw);
-                    position = FrameConvertor.PosRos2Unity(position);
-                    rotation = FrameConvertor.EulerRosDeg2UnityDeg(rotation);
-                    hakoCamera.ConfigureCamera(
-                        camData.pdu_info.robot_name,
-                        camData.camera_type,
-                        camData.coordinate_system.type,
-                        camData.coordinate_system.target,
-                        position,
-                        rotation,
-                        camData.fov.horizontal,
-                        camData.resolution.width,
-                        camData.resolution.height
-                    );
-                    hakoCameras.Add(hakoCamera);
+                    Debug.LogError($"Failed to get HakoCamera component for {camData.pdu_info.robot_name}");
+                    Destroy(newCamera);
+                    continue;
                 }
+
+                newCamera.transform.SetParent(this.transform);
+                newCamera.transform.name = camData.pdu_info.robot_name;
+
+                Vector3 position = new Vector3(camData.coordinate_system.position.x, camData.coordinate_system.position.y, camData.coordinate_system.position.z);
+                Vector3 rotation = new Vector3(camData.coordinate_system.orientation.roll, camData.coordinate_system.orientation.pitch, camData.coordinate_system.orientation.yaw);
+                position = FrameConvertor.PosRos2Unity(position);
+                rotation = FrameConvertor.EulerRosDeg2UnityDeg(rotation);
+
+                hakoCamera.ConfigureCamera(
+                    camData.pdu_info.robot_name,
+                    camData.camera_type,
+                    camData.encode_type,
+                    camData.coordinate_system.type,
+                    camData.coordinate_system.target,
+                    position,
+                    rotation,
+                    camData.fov.horizontal,
+                    camData.resolution.width,
+                    camData.resolution.height
+                );
+
+                hakoCameras[camData.pdu_info.robot_name] = hakoCamera;
             }
         }
+
+
     }
 }

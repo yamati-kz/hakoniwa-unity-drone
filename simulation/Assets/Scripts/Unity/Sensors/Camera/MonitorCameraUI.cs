@@ -8,37 +8,27 @@ namespace hakoniwa.objects.ui
 {
     public class MonitorCameraUI : MonoBehaviour
     {
-        public MonitorCameraManager cameraManager;
+        private MonitorCameraManager cameraManager;
         public RawImage cameraDisplay;
         public TMP_Dropdown cameraDropdown;
         public Button reloadButton;
-        private bool isInitialized = false;
 
         private void Initialize()
         {
-            if (isInitialized == false)
-            {
-                if (cameraManager.IsReady())
-                {
-                    UpdateCameraList();
-                    cameraDropdown.onValueChanged.AddListener(OnCameraSelected);
-                    reloadButton.onClick.AddListener(() => {
-                        cameraManager.ReloadCameras();
-                        UpdateCameraList();
-                    });
-                    isInitialized = true;
-                }
-            }
+            cameraManager = MonitorCameraManager.Instance;
+            UpdateCameraList();
+            cameraDropdown.onValueChanged.AddListener(OnCameraSelected);
+            reloadButton.onClick.AddListener(() => {
+                cameraManager.ReloadCameras();
+                UpdateCameraList();
+            });
         }
 
         void Start()
         {
             Initialize();
         }
-        private void Update()
-        {
-            Initialize();
-        }
+
         void UpdateCameraList()
         {
             cameraDropdown.ClearOptions();

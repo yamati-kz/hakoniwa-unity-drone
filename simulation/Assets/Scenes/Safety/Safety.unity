@@ -391,7 +391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   assetName: UnityAsset
   pduConfigPath: .
-  customJsonFilePath: ./avatar-drone.json
+  customJsonFilePath: ./safety-pdu.json
   hakoObjects:
   - {fileID: 7008344485657547605}
   _state: 0

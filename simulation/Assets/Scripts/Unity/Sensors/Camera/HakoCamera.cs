@@ -9,8 +9,9 @@ namespace hakoniwa.objects.core.sensors
         private RenderTexture _renderTexture;
         private Vector3 localPositionOffset;
         private Vector3 localRotationOffset;
+        private string encode_type;
 
-        public void ConfigureCamera(string cameraId, string cameraType, string coordinate_type, string target, Vector3 position, Vector3 rotation, float fov, int width, int height)
+        public void ConfigureCamera(string cameraId, string cameraType, string _encode_type, string coordinate_type, string target, Vector3 position, Vector3 rotation, float fov, int width, int height)
         {
             _camera = GetComponent<Camera>();
             if (_camera == null)
@@ -56,7 +57,7 @@ namespace hakoniwa.objects.core.sensors
                 transform.position = position;
                 transform.rotation = Quaternion.Euler(rotation);
             }
-
+            this.encode_type = _encode_type;
             Debug.Log($"Configured Camera: {cameraId} - Type: {cameraType}, FOV: {fov}, Position: {position}, Rotation: {rotation}, Resolution: {width}x{height}");
         }
         void LateUpdate()
@@ -76,6 +77,10 @@ namespace hakoniwa.objects.core.sensors
         public float GetFov()
         {
             return _camera.fieldOfView;
+        }
+        public string GetEncodeType()
+        {
+            return encode_type;
         }
 
     }
