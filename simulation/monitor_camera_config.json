@@ -140,6 +140,35 @@
             },
             "camera_type": "RGB",
             "trigger_type": "external"
-        }        
-    ]    
+        },
+        {
+            "pdu_info": {
+                "robot_name": "Movable"
+            },
+            "coordinate_system": {
+                "type": "local",
+                "target": "DJIAvatar",
+                "position": {
+                    "x": -0.4,
+                    "y": 0,
+                    "z": 0.1
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 20,
+                    "yaw": 0
+                }
+            },
+            "fov": {
+                "horizontal": 30,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "trigger_type": "external"
+        }
+    ]
 }

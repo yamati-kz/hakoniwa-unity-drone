@@ -35,6 +35,7 @@ namespace hakoniwa.objects.core.sensors
     public class CoordinateSystem
     {
         public string type;
+        public string target;
         public Position position;
         public Rotation orientation;
     }
@@ -95,6 +96,7 @@ namespace hakoniwa.objects.core.sensors
                 Debug.Log($"Camera: {camera.pdu_info.robot_name}");
                 Debug.Log($" - UI Position: ({camera.ui_position.x}, {camera.ui_position.y})");
                 Debug.Log($" - Type: {camera.camera_type}");
+                Debug.Log($" - Target: {camera.coordinate_system.target}");
                 Debug.Log($" - Position: ({camera.coordinate_system.position.x}, {camera.coordinate_system.position.y}, {camera.coordinate_system.position.z})");
                 Debug.Log($" - Rotation: (Roll: {camera.coordinate_system.orientation.roll}, Pitch: {camera.coordinate_system.orientation.pitch}, Yaw: {camera.coordinate_system.orientation.yaw})");
                 Debug.Log($" - FOV: Horizontal {camera.fov.horizontal}, Vertical {camera.fov.vertical}");

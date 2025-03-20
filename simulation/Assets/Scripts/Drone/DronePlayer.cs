@@ -6,7 +6,7 @@ using hakoniwa.objects.core;
 
 namespace hakoniwa.drone
 {
-    public class DronePlayer : MonoBehaviour, IDroneBatteryStatus, ISimTime
+    public class DronePlayer : MonoBehaviour, IDroneBatteryStatus, ISimTime, IMovableObject
     {
         public GameObject body;
         public int debuff_duration_msec = 100;
@@ -200,6 +200,15 @@ namespace hakoniwa.drone
         public long GetWorldTime()
         {
             return (long)DroneServiceRC.GetTimeUsec(0);
+        }
+
+        public UnityEngine.Vector3 GetPosition()
+        {
+            return body.transform.position;
+        }
+        public UnityEngine.Vector3 GetEulerDeg()
+        {
+            return body.transform.eulerAngles;
         }
     }
 }
