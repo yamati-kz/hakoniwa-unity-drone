@@ -62,3 +62,7 @@ simulation/
 - 3Dモデル：`Turtlebot3.dae`
   - 取得元：[OnShape](https://www.onshape.com/en/)
     - 参照URL：https://cad.onshape.com/documents/58a2bdd2a263420f7a316285/w/01c383d9ab503ce7a7c42e3c/e/16a05a97d362a47b16a8f117
+## `DJIAvatar`: ドローンモデル
+- 3Dモデル：`dji_avatar2.dae`
+  - 取得元：[OnShape](https://www.onshape.com/en/)
+    - 参照URL：https://cad.onshape.com/documents/8302790419ef6b56cd1eb03c/w/dad3a9c868c42504811a0d26/e/c8d69131de8ac6383b17593b
