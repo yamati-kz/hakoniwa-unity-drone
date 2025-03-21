@@ -23,6 +23,7 @@ namespace hakoniwa.drone.sim
 
         public void DoInitialize(string robot_name, IHakoPdu hakoPdu)
         {
+            Debug.Log("HakoCameraController: DoInitialize()");
             this.robotName = robot_name;
             var ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_cmd);
             if (ret == false)
