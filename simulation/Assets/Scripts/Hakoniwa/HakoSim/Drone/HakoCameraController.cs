@@ -44,7 +44,7 @@ namespace hakoniwa.drone.sim
             {
                 throw new ArgumentException($"Can not create pdu for write: {robotName} {pdu_name_data}");
             }
-            var camera_data = new hakoniwa.pdu.msgs.hako_msgs.HakoCameraData(pdu);
+            var camera_data = new hakoniwa.pdu.msgs.hako_msgs.MonitorCameraData(pdu);
             camera_data.request_id = current_id;
             TimeStamp.Set(camera_data.image.header);
             camera_data.image.header.frame_id = robotName;
@@ -57,6 +57,7 @@ namespace hakoniwa.drone.sim
             {
                 camera_data.image.format = "jpeg";
             }
+            camera_data.image_data_length = compressed_bytes.Length;
             camera_data.image.data = compressed_bytes;
 
             pduManager.WriteNamedPdu(pdu);
@@ -71,7 +72,7 @@ namespace hakoniwa.drone.sim
             IPdu pdu_cmd_camera = pduManager.ReadPdu(robotName, pdu_name_cmd);
             if (pdu_cmd_camera != null)
             {
-                var cmd_camera = new hakoniwa.pdu.msgs.hako_msgs.HakoCmdCamera(pdu_cmd_camera);
+                var cmd_camera = new hakoniwa.pdu.msgs.hako_msgs.MonitorCameraCmd(pdu_cmd_camera);
                 if (cmd_camera.header.request)
                 {
                     request_id = cmd_camera.request_id;
