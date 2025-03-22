@@ -172,14 +172,14 @@
             ]
         },
         {
-            "name": "Monitor_BL",
+            "name": "Monitor_B",
             "rpc_pdu_readers": [],
             "rpc_pdu_writers": [],
             "shm_pdu_readers": [
                 {
                     "type": "hako_msgs/MonitorCameraCmd",
                     "org_name": "cmd",
-                    "name": "Monitor_BL_cmd",
+                    "name": "Monitor_B_cmd",
                     "channel_id": 0,
                     "pdu_size": 48,
                     "write_cycle": 1,
@@ -190,7 +190,7 @@
                 {
                     "type": "hako_msgs/MonitorCameraData",
                     "org_name": "data",
-                    "name": "Monitor_BL_data",
+                    "name": "Monitor_B_data",
                     "channel_id": 1,
                     "pdu_size": 1002992,
                     "write_cycle": 1,
@@ -199,14 +199,14 @@
             ]
         },
         {
-            "name": "Monitor_BR",
+            "name": "Monitor_F",
             "rpc_pdu_readers": [],
             "rpc_pdu_writers": [],
             "shm_pdu_readers": [
                 {
                     "type": "hako_msgs/MonitorCameraCmd",
                     "org_name": "cmd",
-                    "name": "Monitor_BR_cmd",
+                    "name": "Monitor_F_cmd",
                     "channel_id": 0,
                     "pdu_size": 48,
                     "write_cycle": 1,
@@ -217,34 +217,7 @@
                 {
                     "type": "hako_msgs/MonitorCameraData",
                     "org_name": "data",
-                    "name": "Monitor_BR_data",
-                    "channel_id": 1,
-                    "pdu_size": 1002992,
-                    "write_cycle": 1,
-                    "method_type": "SHM"
-                }
-            ]
-        },
-        {
-            "name": "Monitor_FL",
-            "rpc_pdu_readers": [],
-            "rpc_pdu_writers": [],
-            "shm_pdu_readers": [
-                {
-                    "type": "hako_msgs/MonitorCameraCmd",
-                    "org_name": "cmd",
-                    "name": "Monitor_FL_cmd",
-                    "channel_id": 0,
-                    "pdu_size": 48,
-                    "write_cycle": 1,
-                    "method_type": "SHM"
-                }
-            ],
-            "shm_pdu_writers": [
-                {
-                    "type": "hako_msgs/MonitorCameraData",
-                    "org_name": "data",
-                    "name": "Monitor_FL_data",
+                    "name": "Monitor_F_data",
                     "channel_id": 1,
                     "pdu_size": 1002992,
                     "write_cycle": 1,
@@ -307,14 +280,14 @@
             ]
         },
         {
-            "name": "Monitor_TOP",
+            "name": "Monitor_TL",
             "rpc_pdu_readers": [],
             "rpc_pdu_writers": [],
             "shm_pdu_readers": [
                 {
                     "type": "hako_msgs/MonitorCameraCmd",
                     "org_name": "cmd",
-                    "name": "Monitor_TOP_cmd",
+                    "name": "Monitor_TL_cmd",
                     "channel_id": 0,
                     "pdu_size": 48,
                     "write_cycle": 1,
@@ -325,7 +298,34 @@
                 {
                     "type": "hako_msgs/MonitorCameraData",
                     "org_name": "data",
-                    "name": "Monitor_TOP_data",
+                    "name": "Monitor_TL_data",
+                    "channel_id": 1,
+                    "pdu_size": 1002992,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                }
+            ]
+        },
+        {
+            "name": "Monitor_TR",
+            "rpc_pdu_readers": [],
+            "rpc_pdu_writers": [],
+            "shm_pdu_readers": [
+                {
+                    "type": "hako_msgs/MonitorCameraCmd",
+                    "org_name": "cmd",
+                    "name": "Monitor_TR_cmd",
+                    "channel_id": 0,
+                    "pdu_size": 48,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                }
+            ],
+            "shm_pdu_writers": [
+                {
+                    "type": "hako_msgs/MonitorCameraData",
+                    "org_name": "data",
+                    "name": "Monitor_TR_data",
                     "channel_id": 1,
                     "pdu_size": 1002992,
                     "write_cycle": 1,

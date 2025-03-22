@@ -30,12 +30,12 @@ namespace hakoniwa.objects.core.sensors
         private Dictionary<string, HakoCamera> hakoCameras;
 
         public string saveDirPath = ".";
-        public void GetAndSaveCameraImages()
+        public void GetAndSaveCameraImages(string image_name)
         {
             foreach (var camera_name in hakoCameras.Keys)
             {
                 var camera_data = hakoCameras[camera_name].GetImage("png");
-                string filePath = Path.Combine(saveDirPath, $"{camera_name}.png");
+                string filePath = Path.Combine(saveDirPath, $"{image_name}_{camera_name}.png");
                 try
                 {
                     File.WriteAllBytes(filePath, camera_data);
