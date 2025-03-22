@@ -38,7 +38,7 @@
                 "type": "global",
                 "position": {
                     "x": -1.5,
-                    "y": -1.5,
+                    "y": -5.5,
                     "z": 1
                 },
                 "orientation": {
@@ -66,8 +66,8 @@
             "coordinate_system": {
                 "type": "global",
                 "position": {
-                    "x": 1.5,
-                    "y": -1.5,
+                    "x": 3.5,
+                    "y": -5.5,
                     "z": 1
                 },
                 "orientation": {
@@ -95,7 +95,7 @@
             "coordinate_system": {
                 "type": "global",
                 "position": {
-                    "x": 1.5,
+                    "x": 3.5,
                     "y": 1.5,
                     "z": 1
                 },
@@ -154,18 +154,18 @@
                 "type": "local",
                 "target": "DJIAvatar",
                 "position": {
-                    "x": -0.4,
-                    "y": 0,
+                    "x": 0.0,
+                    "y": -0.6,
                     "z": 0.1
                 },
                 "orientation": {
                     "roll": 0,
-                    "pitch": 20,
-                    "yaw": 0
+                    "pitch": 10,
+                    "yaw": 90
                 }
             },
             "fov": {
-                "horizontal": 30,
+                "horizontal": 60,
                 "vertical": 60
             },
             "resolution": {

@@ -19,7 +19,6 @@ namespace hakoniwa.drone.sim
          */
         private int current_id = -1;
         private int request_id = 0;
-        private byte[] compressed_bytes;
 
         public void DoInitialize(string robot_name, IHakoPdu hakoPdu)
         {
@@ -57,6 +56,7 @@ namespace hakoniwa.drone.sim
             {
                 camera_data.image.format = "jpeg";
             }
+            byte[] compressed_bytes = cameraManager.GetImage(robotName, encode_type);
             camera_data.image_data_length = compressed_bytes.Length;
             camera_data.image.data = compressed_bytes;
 
@@ -80,7 +80,6 @@ namespace hakoniwa.drone.sim
                     if (current_id != request_id)
                     {
                         current_id = request_id;
-                        this.Scan();
                         this.WriteCameraDataPdu(pduManager);
                     }
                     else
@@ -89,35 +88,6 @@ namespace hakoniwa.drone.sim
                     }
                 }
             }
-        }
-        private void Scan()
-        {
-            var RenderTextureRef = cameraManager.GetCameraRenderTexture(robotName);
-            var tex = new Texture2D(RenderTextureRef.width, RenderTextureRef.height, TextureFormat.RGB24, false);
-            RenderTexture.active = RenderTextureRef;
-            int width = RenderTextureRef.width;
-            int height = RenderTextureRef.height;
-            int step = width * 3;
-            tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-            tex.Apply();
-            byte[] _byte = tex.GetRawTextureData();
-            var raw_bytes = new byte[_byte.Length];
-            for (int i = 0; i < height; i++)
-            {
-                System.Array.Copy(_byte, i * step, raw_bytes, (height - i - 1) * step, step);
-            }
-            string encode_type = cameraManager.GetEncodeType(robotName);
-
-            // Encode texture
-            if (encode_type == "png")
-            {
-                compressed_bytes = tex.EncodeToPNG();
-            }
-            else
-            {
-                compressed_bytes = tex.EncodeToJPG();
-            }
-            UnityEngine.Object.Destroy(tex);
         }
     }
 

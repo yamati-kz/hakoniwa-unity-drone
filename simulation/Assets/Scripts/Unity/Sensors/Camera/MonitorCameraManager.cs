@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using hakoniwa.objects.core.frame;
 using UnityEngine;
 
@@ -27,6 +29,25 @@ namespace hakoniwa.objects.core.sensors
         public GameObject cameraPrefab;
         private Dictionary<string, HakoCamera> hakoCameras;
 
+        public string saveDirPath = ".";
+        public void GetAndSaveCameraImages()
+        {
+            foreach (var camera_name in hakoCameras.Keys)
+            {
+                var camera_data = hakoCameras[camera_name].GetImage("png");
+                string filePath = Path.Combine(saveDirPath, $"{camera_name}.png");
+                try
+                {
+                    File.WriteAllBytes(filePath, camera_data);
+                    Debug.Log($"Image saved: {filePath}");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Failed to save image: {e.Message}");
+                }
+
+            }
+        }
         public List<string> GetCameraNames()
         {
             return new List<string>(hakoCameras.Keys);
@@ -45,6 +66,14 @@ namespace hakoniwa.objects.core.sensors
             if (hakoCameras.TryGetValue(cameraName, out var camera))
             {
                 return camera.GetEncodeType();
+            }
+            return null;
+        }
+        public byte[] GetImage(string cameraName, string encode_type)
+        {
+            if (hakoCameras.TryGetValue(cameraName, out var camera))
+            {
+                return camera.GetImage(encode_type);
             }
             return null;
         }

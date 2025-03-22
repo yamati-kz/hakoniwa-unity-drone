@@ -82,6 +82,35 @@ namespace hakoniwa.objects.core.sensors
         {
             return encode_type;
         }
+        public byte[] GetImage(string encode_type)
+        {
+            byte[] compressed_bytes;
+            var RenderTextureRef = GetRenderTexture();
+            var tex = new Texture2D(RenderTextureRef.width, RenderTextureRef.height, TextureFormat.RGB24, false);
+            RenderTexture.active = RenderTextureRef;
+            int width = RenderTextureRef.width;
+            int height = RenderTextureRef.height;
+            int step = width * 3;
+            tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+            tex.Apply();
+            byte[] _byte = tex.GetRawTextureData();
+            var raw_bytes = new byte[_byte.Length];
+            for (int i = 0; i < height; i++)
+            {
+                System.Array.Copy(_byte, i * step, raw_bytes, (height - i - 1) * step, step);
+            }
 
+            // Encode texture
+            if (encode_type == "png")
+            {
+                compressed_bytes = tex.EncodeToPNG();
+            }
+            else
+            {
+                compressed_bytes = tex.EncodeToJPG();
+            }
+            UnityEngine.Object.Destroy(tex);
+            return compressed_bytes;
+        }
     }
 }
