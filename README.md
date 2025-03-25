@@ -48,6 +48,20 @@ simulation/
 │   │   └── [共通プラグイン]
 ```
 
+# 大阪万博向け関連リポジトリ一覧
+
+大阪万博向けのイベントで利用するリポジトリは以下の通りです。
+
+- https://github.com/toppers/hakoniwa-drone-core
+- https://github.com/toppers/hakoniwa-ar-bridge
+- https://github.com/toppers/hakoniwa-webserver
+- https://github.com/toppers/hakoniwa-pdu-csharp
+- https://github.com/toppers/hakoniwa-sim-csharp
+- https://github.com/toppers/hakoniwa-core-cpp-client
+- https://github.com/toppers/hakoniwa-ros2pdu
+
+`world-expo2025` でタグ付けされています。
+
 # サンプル・ドローン
 
 このプロジェクトでは、以下のドローンモデルが含まれています：
