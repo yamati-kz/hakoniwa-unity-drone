@@ -22,6 +22,7 @@ namespace hakoniwa.objects.core.sensors
         public Fov fov;
         public Resolution resolution;
         public string camera_type;
+        public string encode_type;
         public string trigger_type;
     }
 

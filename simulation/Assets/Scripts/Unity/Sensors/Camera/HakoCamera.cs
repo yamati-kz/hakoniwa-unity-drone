@@ -9,8 +9,9 @@ namespace hakoniwa.objects.core.sensors
         private RenderTexture _renderTexture;
         private Vector3 localPositionOffset;
         private Vector3 localRotationOffset;
+        private string encode_type;
 
-        public void ConfigureCamera(string cameraId, string cameraType, string coordinate_type, string target, Vector3 position, Vector3 rotation, float fov, int width, int height)
+        public void ConfigureCamera(string cameraId, string cameraType, string _encode_type, string coordinate_type, string target, Vector3 position, Vector3 rotation, float fov, int width, int height)
         {
             _camera = GetComponent<Camera>();
             if (_camera == null)
@@ -56,7 +57,7 @@ namespace hakoniwa.objects.core.sensors
                 transform.position = position;
                 transform.rotation = Quaternion.Euler(rotation);
             }
-
+            this.encode_type = _encode_type;
             Debug.Log($"Configured Camera: {cameraId} - Type: {cameraType}, FOV: {fov}, Position: {position}, Rotation: {rotation}, Resolution: {width}x{height}");
         }
         void LateUpdate()
@@ -77,6 +78,39 @@ namespace hakoniwa.objects.core.sensors
         {
             return _camera.fieldOfView;
         }
+        public string GetEncodeType()
+        {
+            return encode_type;
+        }
+        public byte[] GetImage(string encode_type)
+        {
+            byte[] compressed_bytes;
+            var RenderTextureRef = GetRenderTexture();
+            var tex = new Texture2D(RenderTextureRef.width, RenderTextureRef.height, TextureFormat.RGB24, false);
+            RenderTexture.active = RenderTextureRef;
+            int width = RenderTextureRef.width;
+            int height = RenderTextureRef.height;
+            int step = width * 3;
+            tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+            tex.Apply();
+            byte[] _byte = tex.GetRawTextureData();
+            var raw_bytes = new byte[_byte.Length];
+            for (int i = 0; i < height; i++)
+            {
+                System.Array.Copy(_byte, i * step, raw_bytes, (height - i - 1) * step, step);
+            }
 
+            // Encode texture
+            if (encode_type == "png")
+            {
+                compressed_bytes = tex.EncodeToPNG();
+            }
+            else
+            {
+                compressed_bytes = tex.EncodeToJPG();
+            }
+            UnityEngine.Object.Destroy(tex);
+            return compressed_bytes;
+        }
     }
 }
