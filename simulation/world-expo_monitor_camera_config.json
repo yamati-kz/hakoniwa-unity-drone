@@ -1,0 +1,36 @@
+{
+    "pdu_path": "./safety-pdu.json",
+    "monitor_cameras": [
+        {
+            "pdu_info": {
+                "robot_name": "Monitor_DOWN"
+            },
+            "coordinate_system": {
+                "type": "local",
+                "target": "SimpleDrone",
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.25
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 90,
+                    "yaw": 0
+                }
+            },
+            "fov": {
+                "horizontal": 30,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "encode_type": "png",
+            "trigger_type": "external"
+        }
+        
+    ]
+}
