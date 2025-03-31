@@ -67,10 +67,13 @@ namespace hakoniwa.drone.sim
             /*
              * Propeller
              */
-            ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_propeller);
-            if (ret == false)
+            if (drone_propeller)
             {
-                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_propeller}");
+                ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_propeller);
+                if (ret == false)
+                {
+                    throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_propeller}");
+                }
             }
             /*
              * Battery
