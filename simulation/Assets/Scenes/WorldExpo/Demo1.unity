@@ -3098,7 +3098,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   assetName: UnityAsset
   pduConfigPath: .
-  customJsonFilePath: ./custom.json
+  customJsonFilePath: rover.json
   hakoObjects:
   - {fileID: 3875969440726803901}
   _state: 0

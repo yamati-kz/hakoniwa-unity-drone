@@ -31,12 +31,14 @@
             "rpc_pdu_readers": [],
             "rpc_pdu_writers": [],
             "shm_pdu_readers": [
+            ],
+            "shm_pdu_writers": [
                 {
-                    "type": "hako_mavlink_msgs/HakoHilActuatorControls",
-                    "org_name": "motor",
-                    "name": "Rover_motor",
-                    "channel_id": 1,
-                    "pdu_size": 112,
+                    "type": "hako_msgs/GameControllerOperation",
+                    "org_name": "game_controller",
+                    "name": "Rover_game_controller",
+                    "channel_id": 0,
+                    "pdu_size": 136,
                     "write_cycle": 1,
                     "method_type": "SHM"
                 },
@@ -44,23 +46,21 @@
                     "type": "geometry_msgs/Twist",
                     "org_name": "pos",
                     "name": "Rover_pos",
-                    "channel_id": 0,
+                    "channel_id": 1,
                     "pdu_size": 72,
                     "write_cycle": 1,
                     "method_type": "SHM"
-                }
-            ],
-            "shm_pdu_writers": [
+                },
                 {
-                    "type": "std_msgs/Bool",
-                    "org_name": "baggage_sensor",
-                    "name": "Rover_baggage_sensor",
+                    "type": "std_msgs/Float64",
+                    "org_name": "height",
+                    "name": "Rover_height",
                     "channel_id": 2,
-                    "pdu_size": 28,
+                    "pdu_size": 32,
                     "write_cycle": 1,
                     "method_type": "SHM"
-                }                
+                }
             ]
-        }        
+        }             
     ]
 }
