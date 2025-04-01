@@ -1,0 +1,151 @@
+{
+    "pdu_path": "../../../oss/hakoniwa-unity-drone/simulation/safety-forklift-pdu.json",
+    "monitor_cameras": [
+        {
+            "pdu_info": {
+                "robot_name": "Monitor_TL"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": 0,
+                    "y": 0.0,
+                    "z": 3
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 90,
+                    "yaw": 0
+                }
+            },
+            "fov": {
+                "horizontal": 60,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "encode_type": "png",
+            "trigger_type": "external"
+        },
+        {
+            "pdu_info": {
+                "robot_name": "Monitor_B"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": 1.0,
+                    "y": -4.0,
+                    "z": 1.0
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 20,
+                    "yaw": 90
+                }
+            },
+            "fov": {
+                "horizontal": 60,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "encode_type": "png",
+            "trigger_type": "external"
+        },        
+        {
+            "pdu_info": {
+                "robot_name": "Monitor_FR"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": 7.0,
+                    "y": -7.0,
+                    "z": 1
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 10,
+                    "yaw": 125
+                }
+            },
+            "fov": {
+                "horizontal": 30,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "encode_type": "png",
+            "trigger_type": "external"
+        },
+  
+        {
+            "pdu_info": {
+                "robot_name": "Monitor_F"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": 5.0,
+                    "y": 1.0,
+                    "z": 0.5
+                },
+                "orientation": {
+                    "roll": 0,
+                    "pitch": 0,
+                    "yaw": 180
+                }
+            },
+            "fov": {
+                "horizontal": 60,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "encode_type": "png",
+            "trigger_type": "external"
+        },
+        {
+            "pdu_info": {
+                "robot_name": "Monitor_TR"
+            },
+            "coordinate_system": {
+                "type": "global",
+                "position": {
+                    "x": -3.631994,
+                    "y": 0.0652045,
+                    "z": 4.17268
+                },
+                "orientation": {
+                    "roll": -0.874,
+                    "pitch": 36.872,
+                    "yaw": 0
+                }
+            },
+            "fov": {
+                "horizontal": 35,
+                "vertical": 60
+            },
+            "resolution": {
+                "width": 640,
+                "height": 480
+            },
+            "camera_type": "RGB",
+            "encode_type": "png",
+            "trigger_type": "external"
+        }
+    ]
+}

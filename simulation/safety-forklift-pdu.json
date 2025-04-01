@@ -253,33 +253,6 @@
             ]
         },
         {
-            "name": "Monitor_Movable",
-            "rpc_pdu_readers": [],
-            "rpc_pdu_writers": [],
-            "shm_pdu_readers": [
-                {
-                    "type": "hako_msgs/MonitorCameraCmd",
-                    "org_name": "cmd",
-                    "name": "Monitor_Movable_cmd",
-                    "channel_id": 0,
-                    "pdu_size": 48,
-                    "write_cycle": 1,
-                    "method_type": "SHM"
-                }
-            ],
-            "shm_pdu_writers": [
-                {
-                    "type": "hako_msgs/MonitorCameraData",
-                    "org_name": "data",
-                    "name": "Monitor_Movable_data",
-                    "channel_id": 1,
-                    "pdu_size": 1002992,
-                    "write_cycle": 1,
-                    "method_type": "SHM"
-                }
-            ]
-        },
-        {
             "name": "Monitor_TL",
             "rpc_pdu_readers": [],
             "rpc_pdu_writers": [],
