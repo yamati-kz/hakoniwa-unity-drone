@@ -24,7 +24,7 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2",
         "com.hakoniwa-lab.hakoniwa-pdu": "https://github.com/toppers/hakoniwa-pdu-csharp.git"
       },
-      "hash": "3d9586145740b87c3e4a3a61d72590bebd75d95d"
+      "hash": "f4fb51f70a0341538deae60f49a6e95af7bffa52"
     },
     "com.meta.xr.mrutilitykit": {
       "version": "71.0.0",
