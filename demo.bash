@@ -3,7 +3,11 @@
 CONDUCTOR_PID=
 WEBSERVER_PID=
 AR_BRIDGE_PID=
+UNITY_PID=
 function kill_processes() {
+    if [ -n "$UNITY_PID" ]; then
+        kill -9 $UNITY_PID
+    fi
     if [ -n "$WEBSERVER_PID" ]; then
         kill -9 $WEBSERVER_PID
     fi
@@ -40,6 +44,14 @@ function start_webserver() {
     cd $BASE_DIR
 }
 
+function start_unity() {
+    echo "Starting Unity"
+    cd MacShareSimApps
+    ./ShareSimApps.app/Contents/MacOS/simulation &
+    UNITY_PID=$!
+    cd $BASE_DIR
+}
+
 function start_ar_bridge() {
     echo "Starting ar_bridge"
     cd hakoniwa-ar-bridge
@@ -50,8 +62,18 @@ function start_ar_bridge() {
 
 start_conductor
 sleep 1
+
+start_unity
+sleep 3
+
+hako-cmd start
+
+sleep 2
+
 start_webserver
 sleep 1
+
+
 start_ar_bridge
 
 echo "Start Unity, then press Enter key"
