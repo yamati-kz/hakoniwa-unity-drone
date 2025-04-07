@@ -241,3 +241,14 @@ QUEST3を起動して、インストールしたapkファイルを起動しま�
 
 
 
+# QUEST3 の Player Settings
+
+![image](https://github.com/user-attachments/assets/38b1b6a6-3923-4c2a-8f5e-adb0005d29c4)
+
+![image](https://github.com/user-attachments/assets/ca19adfa-6ec4-4318-bee5-5d20f738cec9)
+
+![image](https://github.com/user-attachments/assets/b82f6236-9c94-4b8b-a7be-87475aed20de)
+
+
+![image](https://github.com/user-attachments/assets/4ed19597-a115-4511-97bf-70273a41e054)
+
