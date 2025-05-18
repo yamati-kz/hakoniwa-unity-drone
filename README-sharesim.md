@@ -121,6 +121,7 @@ INFO: hako_conductor thread start
 
 
 次に、以下のコマンで、箱庭Webサーバーを起動します。
+※注意：箱庭Webサーバーの起動は、UnityのSTARTボタン押下後になりました。
 
 ```powershell
 python -m server.main --asset_name WebServer --config_path ..\simulation\sharesim-drone.json --delta_time_usec 20000
