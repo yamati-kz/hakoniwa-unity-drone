@@ -369,7 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 113249750}
-  currentMode: 1
+  currentMode: 0
   wheelSpeed: 0.1
   moveSpeed: 0.1
   rotateSpeed: 1
