@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using hakoniwa.drone;
 using hakoniwa.pdu.interfaces;
 using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.pdu.msgs.hako_mavlink_msgs;
+using NUnit.Framework;
 using UnityEngine;
 
 public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
@@ -13,6 +15,7 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
     public string pdu_name_pos = "pos";
     public GameObject body;
     private DronePropeller drone_propeller;
+    private DroneControl drone_control;
 
     void Start()
     {
@@ -26,6 +29,11 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
             throw new Exception("Can not found drone propeller");
         }
         Debug.Log("max rotation : " + drone_propeller.maxRotationSpeed);
+        drone_control = this.GetComponentInChildren<DroneControl>();
+        if (drone_control == null)
+        {
+            Debug.Log("not found DroneControl");
+        }
     }
     private float[] prev_controls = new float[4];
     void FixedUpdate()
@@ -33,6 +41,7 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
         var pduManager = WebServerBridge.Instance.Get();
         if (pduManager == null)
         {
+            Debug.LogWarning("Can not find pduManager...");
             return;
         }
 
@@ -71,6 +80,18 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
             drone_propeller.Rotate((float)propeller.controls[0], (float)propeller.controls[1], (float)propeller.controls[2], (float)propeller.controls[3]);
         }
     }
+    void Update()
+    {
+        /*
+         * DroneControl
+         */
+        if (drone_control != null)
+        {
+            //Debug.Log("Do Drone Control..");
+            drone_control.HandleInput();
+        }
+
+    }
 
     private void UpdatePosition(Twist pos)
     {
@@ -81,8 +102,8 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
         body.transform.position = unity_pos;
         //Debug.Log("pos: " + body.transform.position);
 
-        float rollDegrees = Mathf.Rad2Deg * (float)pos.angular.x;
-        float pitchDegrees = Mathf.Rad2Deg * (float)pos.angular.y;
+        float rollDegrees = Mathf.Rad2Deg * (float)pos.angular.x * 1;
+        float pitchDegrees = Mathf.Rad2Deg * (float)pos.angular.y * 1;
         float yawDegrees = Mathf.Rad2Deg * (float)pos.angular.z;
 
         UnityEngine.Quaternion rotation = UnityEngine.Quaternion.Euler(pitchDegrees, -yawDegrees, -rollDegrees);
@@ -101,5 +122,22 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
         Debug.Log("declare pdu pos: " + ret);
         ret = await pdu_manager.DeclarePduForRead(robotName, pdu_name_propeller);
         Debug.Log("declare pdu propeller: " + ret);
+
+        foreach (UnityEngine.Transform child in this.transform)
+        {
+            var subObjects = child.GetComponentsInChildren<IHakoniwaWebObject>();
+            foreach (var obj in subObjects)
+            {
+                if ((UnityEngine.Object)obj != (UnityEngine.Object)this
+                    && obj is MonoBehaviour mb
+                    && mb.enabled
+                    && mb.gameObject.activeInHierarchy)
+                {
+                    await obj.DeclarePduAsync();
+                }
+
+            }
+        }
+
     }
 }

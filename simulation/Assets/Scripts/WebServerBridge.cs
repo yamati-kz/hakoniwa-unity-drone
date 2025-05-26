@@ -18,7 +18,10 @@ public class WebServerBridge : MonoBehaviour, IHakoPduInstance
     public List<GameObject> hako_objects;
     private IEnvironmentService service;
     public string serverUri = "ws://localhost:8765";
-
+    [SerializeField]
+    private string pduConfigPath = ".";
+    [SerializeField]
+    private string customJsonFilePath = "./custom.json";
     private void Awake()
     {
         if (Instance == null)
@@ -50,13 +53,13 @@ public class WebServerBridge : MonoBehaviour, IHakoPduInstance
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
-        service = EnvironmentServiceFactory.Create("websocket_dotnet", "unity", ".");
+        service = EnvironmentServiceFactory.Create("websocket_dotnet", "local", ".");
         if (service == null)
         {
             throw new System.Exception("Can not create service...");
         }
 
-        mgr = new PduManager(service, ".");
+        mgr = new PduManager(service, pduConfigPath, customJsonFilePath);
         Debug.Log("Start Service!! " + serverUri);
         var result = await mgr.StartService(serverUri);
         Debug.Log("Start Service!! " + serverUri + " ret: " + result);

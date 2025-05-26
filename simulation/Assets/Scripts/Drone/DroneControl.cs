@@ -1,5 +1,5 @@
 using hakoniwa.objects.core;
-using hakoniwa.drone.service;
+using hakoniwa.pdu.interfaces;
 using UnityEngine;
 
 namespace hakoniwa.drone
@@ -10,9 +10,20 @@ namespace hakoniwa.drone
         Xbox,
         Xr
     }
+    public interface IDroneControlOp
+    {
+        public void DoInitialize(string robotName);
+        public int PutRadioControlButton(int index, int value);
+        public int PutHorizontal(int index, double value);
+        public int PutForward(int index, double value);
+        public int PutHeading(int index, double value);
+        public int PutVertical(int index, double value);
+        public void DoFlush();
+    }
 
     public class DroneControl : MonoBehaviour
     {
+        public string robotName = "Drone";
         public DroneControlInputType input_type;
         public double stick_strength = 0.1;
         public double stick_yaw_strength = 1.0;
@@ -21,10 +32,24 @@ namespace hakoniwa.drone
         public GameObject grabberObject;
         private IBaggageGrabber grabber;
         public bool forceGrab = false;
+        private IDroneControlOp droneControlOp = null;
+        public bool isPlayer = true;
 
         public bool IsMagnetOn()
         {
             return magnet_on;
+        }
+        private void Awake()
+        {
+            if (isPlayer)
+            {
+                droneControlOp = new DroneControlRc();
+            }
+            else
+            {
+                droneControlOp = this.GetComponentInChildren<IDroneControlOp>();
+            }
+            droneControlOp.DoInitialize(robotName);
         }
 
         private void Start()
@@ -64,11 +89,11 @@ namespace hakoniwa.drone
 
             if (controller_input.IsAButtonPressed())
             {
-                DroneServiceRC.PutRadioControlButton(0, 1);
+                droneControlOp.PutRadioControlButton(0, 1);
             }
             else if (controller_input.IsAButtonReleased())
             {
-                DroneServiceRC.PutRadioControlButton(0, 0);
+                droneControlOp.PutRadioControlButton(0, 0);
             }
             if (controller_input.IsBButtonReleased())
             {
@@ -86,10 +111,12 @@ namespace hakoniwa.drone
                 }
 
             }
-            DroneServiceRC.PutHorizontal(0, horizontal * stick_strength);
-            DroneServiceRC.PutForward(0, -forward * stick_strength);
-            DroneServiceRC.PutHeading(0, yaw * stick_yaw_strength);
-            DroneServiceRC.PutVertical(0, -pitch * stick_strength);
+            droneControlOp.PutHorizontal(0, horizontal * stick_strength);
+            droneControlOp.PutForward(0, -forward * stick_strength);
+            droneControlOp.PutHeading(0, yaw * stick_yaw_strength);
+            droneControlOp.PutVertical(0, -pitch * stick_strength);
+
+            droneControlOp.DoFlush();
         }
 
     }
