@@ -1,14 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using hakoniwa.drone;
+using hakoniwa.objects.core;
 using hakoniwa.pdu.interfaces;
 using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.pdu.msgs.hako_mavlink_msgs;
+using hakoniwa.sim;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
+public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatteryStatus
 {
     public string robotName = "Drone";
     public string pdu_name_propeller = "motor";
@@ -16,6 +18,9 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
     public GameObject body;
     private DronePropeller drone_propeller;
     private DroneControl drone_control;
+    public bool useBattery = true;
+    public string pdu_name_battery = "battery";
+    private hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus battery_status;
 
     void Start()
     {
@@ -79,6 +84,18 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
             //Debug.Log($"c1: {propeller.controls[0]} c2: {propeller.controls[1]} c3: {propeller.controls[2]} c4: {propeller.controls[3]}");
             drone_propeller.Rotate((float)propeller.controls[0], (float)propeller.controls[1], (float)propeller.controls[2], (float)propeller.controls[3]);
         }
+        /*
+         * Battery
+         */
+        if (useBattery)
+        {
+            IPdu pdu_battery = pduManager.ReadPdu(robotName, pdu_name_battery);
+            if (pdu_battery != null)
+            {
+                battery_status = new hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus(pdu_battery);
+            }
+        }
+
     }
     void Update()
     {
@@ -122,6 +139,17 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
         Debug.Log("declare pdu pos: " + ret);
         ret = await pdu_manager.DeclarePduForRead(robotName, pdu_name_propeller);
         Debug.Log("declare pdu propeller: " + ret);
+        /*
+         * Battery
+         */
+        if (useBattery)
+        {
+            ret = await pdu_manager.DeclarePduForRead(robotName, pdu_name_battery);
+            if (ret == false)
+            {
+                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_battery}");
+            }
+        }
 
         foreach (UnityEngine.Transform child in this.transform)
         {
@@ -139,5 +167,51 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject
             }
         }
 
+    }
+
+    public double get_full_voltage()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.full_voltage;
+        }
+        return 0;
+    }
+
+    public double get_curr_voltage()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.curr_voltage;
+        }
+        return 0;
+    }
+
+    public uint get_status()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.status;
+        }
+        return 0;
+    }
+
+    public uint get_cycles()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.cycles;
+        }
+        return 0;
+
+    }
+
+    public double get_temperature()
+    {
+        if (battery_status != null)
+        {
+            return battery_status.curr_temp;
+        }
+        return 0;
     }
 }
