@@ -18,6 +18,11 @@ namespace hakoniwa.objects.core
             }
         }
 
+        public bool IsGrabbed()
+        {
+            return magnet.IsConntactOn();
+        }
+
         public void Release()
         {
             magnet.TurnOff();

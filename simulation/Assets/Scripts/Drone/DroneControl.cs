@@ -18,6 +18,8 @@ namespace hakoniwa.drone
         public int PutForward(int index, double value);
         public int PutHeading(int index, double value);
         public int PutVertical(int index, double value);
+        public bool GetMagnetRequest(out bool magnet_on);
+        public void PutMagnetStatus(bool magnet_on, bool contact_on);
         public void DoFlush();
     }
 
@@ -87,6 +89,8 @@ namespace hakoniwa.drone
             float yaw = leftStick.x;
             float pitch = leftStick.y;
 
+            bool mag_on = false;
+            bool mag_req = droneControlOp.GetMagnetRequest(out mag_on);
             if (controller_input.IsAButtonPressed())
             {
                 droneControlOp.PutRadioControlButton(0, 1);
@@ -97,6 +101,7 @@ namespace hakoniwa.drone
             }
             if (controller_input.IsBButtonReleased())
             {
+                Debug.Log("Bbutton released");
                 magnet_on = IsMagnetOn() ? false : true;
                 if (grabber != null)
                 {
@@ -111,6 +116,21 @@ namespace hakoniwa.drone
                 }
 
             }
+            else if (mag_req)
+            {
+                if (mag_on)
+                {
+                    Debug.Log("Request: mag_on");
+                    grabber.Grab(forceGrab);
+                }
+                else
+                {
+                    Debug.Log("Request: mag_off");
+                    grabber.Release();
+                }
+                magnet_on = mag_on;
+            }
+            droneControlOp.PutMagnetStatus(magnet_on, grabber.IsGrabbed());
             droneControlOp.PutHorizontal(0, horizontal * stick_strength);
             droneControlOp.PutForward(0, -forward * stick_strength);
             droneControlOp.PutHeading(0, yaw * stick_yaw_strength);

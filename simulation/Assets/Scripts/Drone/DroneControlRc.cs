@@ -16,6 +16,12 @@ namespace hakoniwa.drone
             //nothing to do
         }
 
+        public bool GetMagnetRequest(out bool magnet_on)
+        {
+            magnet_on = false;
+            return false;
+        }
+
         public int PutForward(int index, double value)
         {
             return DroneServiceRC.PutForward(index, value);
@@ -29,6 +35,11 @@ namespace hakoniwa.drone
         public int PutHorizontal(int index, double value)
         {
             return DroneServiceRC.PutHorizontal(index, value);
+        }
+
+        public void PutMagnetStatus(bool magnet_on, bool contact_on)
+        {
+            //nothing to do
         }
 
         public int PutRadioControlButton(int index, int value)
