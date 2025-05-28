@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
+using hakoniwa.objects.core.sensors;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace hakoniwa.drone.sim
+namespace hakoniwa.drone
 {
     public class DroneConfig : MonoBehaviour
     {
@@ -107,14 +108,15 @@ namespace hakoniwa.drone.sim
         }
         public void SetLidarPosition(string droneName)
         {
-            var lidars = this.GetComponentsInChildren<LiDAR3DController>();
-            foreach (var lidar in lidars)
+            var lidars = this.GetComponentsInChildren<ILiDAR3DController>();
+            foreach (var ilidar in lidars)
             {
+                var lidar = ((MonoBehaviour)ilidar).gameObject;
                 Debug.Log("Found Lidar: " + lidar.transform.parent.gameObject.name);
                 LiDAR3DParams param;
                 if (this.GetParam(droneName, lidar.transform.parent.gameObject.name, out param))
                 {
-                    lidar.SetParams(param);
+                    ilidar.SetParams(param);
                     //pos
                     float x = loadedData.drones[droneName].LiDARs[lidar.transform.parent.gameObject.name].X;
                     float y = loadedData.drones[droneName].LiDARs[lidar.transform.parent.gameObject.name].Y;

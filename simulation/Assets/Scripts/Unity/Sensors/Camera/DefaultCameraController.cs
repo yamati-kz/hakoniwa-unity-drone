@@ -56,33 +56,36 @@ namespace hakoniwa.objects.core.sensors
         public int move_current_id = -1;
         public int move_request_id = 0;
         public float move_step = 1.0f;  // 一回の動きのステップ量
-        private float camera_move_button_time_duration = 0f;
         public float camera_move_button_threshold_speedup = 1.0f;
 
 
         public async void DelclarePdu(string robotName, IPduManager pduManager)
         {
             this.robotName = robotName;
-            var ret = await pduManager.DeclarePduForRead(robotName, pdu_name_cmd_camera);
-            if (ret == false)
+            if (pduManager != null)
             {
-                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_cmd_camera}");
+                var ret = await pduManager.DeclarePduForRead(robotName, pdu_name_cmd_camera);
+                if (ret == false)
+                {
+                    throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_cmd_camera}");
+                }
+                ret = await pduManager.DeclarePduForRead(robotName, pdu_name_cmd_camera_move);
+                if (ret == false)
+                {
+                    throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_cmd_camera_move}");
+                }
+                ret = await pduManager.DeclarePduForWrite(robotName, pdu_name_camera_data);
+                if (ret == false)
+                {
+                    throw new ArgumentException($"Can not declare pdu for write: {robotName} {pdu_name_camera_data}");
+                }
+                ret = await pduManager.DeclarePduForWrite(robotName, pdu_name_camera_info);
+                if (ret == false)
+                {
+                    throw new ArgumentException($"Can not declare pdu for write: {robotName} {pdu_name_camera_info}");
+                }
             }
-            ret = await pduManager.DeclarePduForRead(robotName, pdu_name_cmd_camera_move);
-            if (ret == false)
-            {
-                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_cmd_camera_move}");
-            }
-            ret = await pduManager.DeclarePduForWrite(robotName, pdu_name_camera_data);
-            if (ret == false)
-            {
-                throw new ArgumentException($"Can not declare pdu for write: {robotName} {pdu_name_camera_data}");
-            }
-            ret = await pduManager.DeclarePduForWrite(robotName, pdu_name_camera_info);
-            if (ret == false)
-            {
-                throw new ArgumentException($"Can not declare pdu for write: {robotName} {pdu_name_camera_info}");
-            }
+
         }
 
         public void Initialize()

@@ -11,7 +11,6 @@ namespace hakoniwa.drone.sim
 {
     public class CameraController : MonoBehaviour
     {
-        private string sensor_name = "hakoniwa_camera";
         private string pdu_name_cmd_camera = "hako_cmd_camera";
         private string pdu_name_camera_data = "hako_camera_data";
         private string pdu_name_cmd_camera_move = "hako_cmd_camera_move";

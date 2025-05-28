@@ -1,5 +1,7 @@
 using hakoniwa.drone;
+using hakoniwa.drone.sim;
 using hakoniwa.objects.core;
+using hakoniwa.objects.core.sensors;
 using hakoniwa.pdu.interfaces;
 using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.pdu.msgs.hako_mavlink_msgs;
@@ -22,6 +24,8 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
     public string pdu_name_battery = "battery";
     private hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus battery_status;
     public DroneCameraController camera_controller;
+    private DroneConfig droneConfig;
+    private ILiDAR3DController[] lidars;
 
     void Start()
     {
@@ -40,6 +44,15 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
         {
             Debug.Log("not found DroneControl");
         }
+        /*
+         * Drone Config
+         */
+        droneConfig = this.GetComponentInChildren<DroneConfig>();
+        if (droneConfig)
+        {
+            droneConfig.LoadDroneConfig(robotName);
+        }
+
     }
     private float[] prev_controls = new float[4];
     private IPduManager pduManager;
@@ -106,6 +119,16 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
         if (camera_controller != null)
         {
             camera_controller.DoControl(pduManager);
+        }
+        /*
+         * LiDAR
+         */
+        if (lidars != null)
+        {
+            foreach (var lidar in lidars)
+            {
+                lidar.DoControl(pduManager);
+            }
         }
 
     }
@@ -188,6 +211,21 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
         if (camera_controller)
         {
             camera_controller.GetCameraController().DelclarePdu(robotName, pdu_manager);
+        }
+        /*
+         * LiDAR
+         */
+        lidars = this.GetComponentsInChildren<ILiDAR3DController>();
+        if (lidars != null)
+        {
+            if (droneConfig)
+            {
+                droneConfig.SetLidarPosition(robotName);
+            }
+            foreach (var lidar in lidars)
+            {
+                lidar.DoInitialize(robotName, pdu_manager);
+            }
         }
 
     }
