@@ -19,7 +19,7 @@
                     "DrawDebugPoints": true
                 },
                 "DJIAvatarLiDAR": {
-                    "Enabled": false,
+                    "Enabled": true,
                     "NumberOfChannels": 16,
                     "RotationsPerSecond": 10,
                     "PointsPerSecond": 10000,
@@ -31,7 +31,8 @@
                     "HorizontalFOVStart": -5,
                     "HorizontalFOVEnd": 5,
                     "DrawDebugPoints": true
-                }            }
+                }
+            }
         }
     }
 }
