@@ -26,6 +26,18 @@ namespace hakoniwa.objects.core
          */
         public bool IsYButtonPressed();
         public bool IsYButtonReleased();
+
+        /*
+         * Up
+         */
+        public bool IsUpButtonPressed();
+        public bool IsUpButtonReleased();
+
+        /*
+         * Down
+         */
+        public bool IsDownButtonPressed();
+        public bool IsDownButtonReleased();
     }
 }
 

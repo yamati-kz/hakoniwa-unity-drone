@@ -68,6 +68,30 @@ namespace hakoniwa.objects.core
         private void OnDestroy()
         {
         }
+
+        public bool IsUpButtonPressed()
+        {
+            //not supported
+            return false;
+        }
+
+        public bool IsUpButtonReleased()
+        {
+            //not supported
+            return false;
+        }
+
+        public bool IsDownButtonPressed()
+        {
+            //not supported
+            return false;
+        }
+
+        public bool IsDownButtonReleased()
+        {
+            //not supported
+            return false;
+        }
     }
 
 }

@@ -21,6 +21,7 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
     public bool useBattery = true;
     public string pdu_name_battery = "battery";
     private hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus battery_status;
+    public DroneCameraController camera_controller;
 
     void Start()
     {
@@ -41,13 +42,17 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
         }
     }
     private float[] prev_controls = new float[4];
+    private IPduManager pduManager;
     void FixedUpdate()
     {
-        var pduManager = WebServerBridge.Instance.Get();
         if (pduManager == null)
         {
-            Debug.LogWarning("Can not find pduManager...");
-            return;
+            pduManager = WebServerBridge.Instance.Get();
+            if (pduManager == null)
+            {
+                Debug.LogWarning("Can not find pduManager...");
+                return;
+            }
         }
 
         /*
@@ -95,6 +100,13 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
                 battery_status = new hakoniwa.pdu.msgs.hako_msgs.HakoBatteryStatus(pdu_battery);
             }
         }
+        /*
+         * Camera
+         */
+        if (camera_controller != null)
+        {
+            camera_controller.DoControl(pduManager);
+        }
 
     }
     void Update()
@@ -106,6 +118,10 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
         {
             //Debug.Log("Do Drone Control..");
             drone_control.HandleInput();
+            if ((pduManager != null) && (camera_controller != null))
+            {
+                drone_control.HandleCameraControl(camera_controller.GetCameraController(), pduManager);
+            }
         }
 
     }
@@ -165,6 +181,13 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
                 }
 
             }
+        }
+        /*
+         * Camera
+         */
+        if (camera_controller)
+        {
+            camera_controller.GetCameraController().DelclarePdu(robotName, pdu_manager);
         }
 
     }

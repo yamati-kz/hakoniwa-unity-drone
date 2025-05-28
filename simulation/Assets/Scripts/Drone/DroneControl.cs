@@ -1,4 +1,6 @@
+using hakoniwa.drone.sim;
 using hakoniwa.objects.core;
+using hakoniwa.objects.core.sensors;
 using hakoniwa.pdu.interfaces;
 using UnityEngine;
 
@@ -80,6 +82,74 @@ namespace hakoniwa.drone
             }
         }
 
+        public float move_step = 1.0f;  // 一回の動きのステップ量
+        private float camera_move_button_time_duration = 0f;
+        public float camera_move_button_threshold_speedup = 1.0f;
+        public bool is_pressed_up = false;
+        public bool is_pressed_down = false;
+
+        public void HandleCameraControl(ICameraController camera_controller, IPduManager pduManager)
+        {
+            {
+                /*
+                 * Camera Image Rc request
+                 */
+                if (controller_input.IsYButtonPressed())
+                {
+                    Debug.Log("SHOT!!");
+                    camera_controller.Scan();
+                    camera_controller.WriteCameraDataPdu(pduManager);
+                }
+                if (controller_input.IsUpButtonPressed())
+                {
+                    is_pressed_up = true;
+                }
+                else if (controller_input.IsUpButtonReleased())
+                {
+                    is_pressed_up = false;
+                }
+                if (is_pressed_up)
+                {
+                    camera_move_button_time_duration += Time.fixedDeltaTime;
+                    if (camera_move_button_time_duration > camera_move_button_threshold_speedup)
+                    {
+                        camera_controller.RotateCamera(-move_step * 3f);
+                    }
+                    else
+                    {
+                        camera_controller.RotateCamera(-move_step);
+                    }
+
+                }
+                if (controller_input.IsDownButtonPressed())
+                {
+                    is_pressed_down = true;
+                }
+                else if (controller_input.IsDownButtonReleased())
+                {
+                    is_pressed_down = false;
+                }
+
+
+                if (is_pressed_down)
+                {
+                    camera_move_button_time_duration += Time.fixedDeltaTime;
+                    if (camera_move_button_time_duration > camera_move_button_threshold_speedup)
+                    {
+                        camera_controller.RotateCamera(move_step * 3f);
+                    }
+                    else
+                    {
+                        camera_controller.RotateCamera(move_step);
+                    }
+                }
+
+                if (!is_pressed_down && !is_pressed_up)
+                {
+                    camera_move_button_time_duration = 0f;
+                }
+            }
+        }
         public void HandleInput()
         {
             Vector2 leftStick = controller_input.GetLeftStickInput();

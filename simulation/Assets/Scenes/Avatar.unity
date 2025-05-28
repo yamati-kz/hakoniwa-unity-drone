@@ -2006,6 +2006,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1647239014}
   - component: {fileID: 1647239015}
+  - component: {fileID: 1647239016}
   m_Layer: 0
   m_Name: camera
   m_TagString: Untagged
@@ -2041,6 +2042,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d17ece5b51594a839a0d61d4e042257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  move_step: 0.2
+  camera_move_button_threshold_speedup: 1
+--- !u!114 &1647239016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647239013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad810b3f3a110864cb8270e7de2d35e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   sensor_name: hakoniwa_camera
   pdu_name_cmd_camera: hako_cmd_camera
   pdu_name_camera_data: hako_camera_data
@@ -2056,7 +2071,7 @@ MonoBehaviour:
   encode_type: 0
   move_current_id: -1
   move_request_id: 0
-  move_step: 0.2
+  move_step: 1
   camera_move_button_threshold_speedup: 1
 --- !u!1 &1862141795
 GameObject:

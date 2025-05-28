@@ -70,5 +70,24 @@ namespace hakoniwa.objects.core
             inputActions.Gameplay.Disable();
         }
 
+        public bool IsUpButtonPressed()
+        {
+            return inputActions.Gameplay.Up.WasPressedThisFrame();
+        }
+
+        public bool IsUpButtonReleased()
+        {
+            return inputActions.Gameplay.Up.WasReleasedThisFrame() ;
+        }
+
+        public bool IsDownButtonPressed()
+        {
+            return inputActions.Gameplay.Down.WasPressedThisFrame();
+        }
+
+        public bool IsDownButtonReleased()
+        {
+            return inputActions.Gameplay.Down.WasReleasedThisFrame();
+        }
     }
 }
