@@ -200,7 +200,10 @@ namespace hakoniwa.drone
                 }
                 magnet_on = mag_on;
             }
-            droneControlOp.PutMagnetStatus(magnet_on, grabber.IsGrabbed());
+            if (grabber  != null)
+            {
+                droneControlOp.PutMagnetStatus(magnet_on, grabber.IsGrabbed());
+            }
             droneControlOp.PutHorizontal(0, horizontal * stick_strength);
             droneControlOp.PutForward(0, -forward * stick_strength);
             droneControlOp.PutHeading(0, yaw * stick_yaw_strength);
