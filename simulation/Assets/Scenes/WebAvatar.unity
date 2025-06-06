@@ -154,6 +154,7 @@ MonoBehaviour:
   serverUri: ws://172.31.9.252:8765
   pduConfigPath: .
   customJsonFilePath: ./avatar-drone.json
+  "filesystem\uFF3Ftype": local
 --- !u!4 &113249750
 Transform:
   m_ObjectHideFlags: 0

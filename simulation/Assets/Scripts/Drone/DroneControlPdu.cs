@@ -30,6 +30,7 @@ namespace hakoniwa.drone
         private double[] axis;
 
         //magnet
+        public bool useMagnet = true;
         public string pdu_name_cmd_magnet = "hako_cmd_magnet_holder";
         public string pdu_name_status_magnet = "hako_status_magnet_holder";
         private bool status_magnet_magnet_on = false;
@@ -55,17 +56,20 @@ namespace hakoniwa.drone
             /*
              * Magnet
              */
-            ret = await pdu_manager.DeclarePduForRead(robotName, pdu_name_cmd_magnet);
-            if (ret == false)
+            if (useMagnet)
             {
-                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_cmd_magnet}");
-            }
-            ret = await pdu_manager.DeclarePduForWrite(robotName, pdu_name_status_magnet);
-            if (ret == false)
-            {
-                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_status_magnet}");
-            }
 
+                ret = await pdu_manager.DeclarePduForRead(robotName, pdu_name_cmd_magnet);
+                if (ret == false)
+                {
+                    throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_cmd_magnet}");
+                }
+                ret = await pdu_manager.DeclarePduForWrite(robotName, pdu_name_status_magnet);
+                if (ret == false)
+                {
+                    throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_status_magnet}");
+                }
+            }
         }
 
         public void DoFlush()
@@ -91,16 +95,20 @@ namespace hakoniwa.drone
             /*
              * Magnet
              */
-            INamedPdu pdu_status_magnet = pdu_manager.CreateNamedPdu(robotName, pdu_name_status_magnet);
-            if (pdu_name_status_magnet == null)
+            if (useMagnet)
             {
-                throw new ArgumentException($"Can not create pdu for write: {robotName} {pdu_name_status_magnet}");
+                INamedPdu pdu_status_magnet = pdu_manager.CreateNamedPdu(robotName, pdu_name_status_magnet);
+                if (pdu_name_status_magnet == null)
+                {
+                    throw new ArgumentException($"Can not create pdu for write: {robotName} {pdu_name_status_magnet}");
+                }
+                var status_magnet = new hakoniwa.pdu.msgs.hako_msgs.HakoStatusMagnetHolder(pdu_status_magnet);
+                status_magnet.magnet_on = status_magnet_magnet_on;
+                status_magnet.contact_on = status_magnet_contact_on;
+                pdu_manager.WriteNamedPdu(pdu_status_magnet);
+                pdu_manager.FlushNamedPdu(pdu_status_magnet);
             }
-            var status_magnet = new hakoniwa.pdu.msgs.hako_msgs.HakoStatusMagnetHolder(pdu_status_magnet);
-            status_magnet.magnet_on = status_magnet_magnet_on;
-            status_magnet.contact_on = status_magnet_contact_on;
-            pdu_manager.WriteNamedPdu(pdu_status_magnet);
-            pdu_manager.FlushNamedPdu(pdu_status_magnet);
+
         }
 
         public void DoInitialize(string robotName)

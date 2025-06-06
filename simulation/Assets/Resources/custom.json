@@ -47,7 +47,18 @@
                     "write_cycle": 1
                 }
             ],
-            "shm_pdu_writers": []
+            "shm_pdu_writers": [
+                {
+                    "type": "hako_msgs/GameControllerOperation",
+                    "org_name": "hako_cmd_game",
+                    "name": "Drone_hako_cmd_game",
+                    "channel_id": 9,
+                    "pdu_size": 160,
+                    "write_cycle": 1,
+                    "method_type": "SHM"
+                }
+
+            ]
         },
         {
             "name": "Drone1",
