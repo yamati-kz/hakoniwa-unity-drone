@@ -21,6 +21,7 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
     private BaggageGrabber baggage_grabber;
     private ShareSimClient sharesim_client;
     public bool enable_debuff = false;
+    public bool useWebServer = true;
 
     public bool enable_data_logger = false;
     public string debug_logpath = null;
@@ -110,8 +111,11 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
 
     void Start()
     {
-        sharesim_client = ShareSimClient.Instance;
-        ibridge = HakoniwaArBridgeDevice.Instance;
+        if (useWebServer)
+        {
+            sharesim_client = ShareSimClient.Instance;
+            ibridge = HakoniwaArBridgeDevice.Instance;
+        }
         my_collision = this.GetComponentInChildren<DroneCollision>();
         if (my_collision == null) {
             throw new Exception("Can not found collision");
@@ -130,7 +134,7 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
         baggage_grabber = this.GetComponentInChildren<BaggageGrabber>();
         if (baggage_grabber == null)
         {
-            throw new Exception("Can not found BaggageGrabber");
+            Debug.LogWarning("Can not found BaggageGrabber");
         }
 
         string droneConfigText = LoadTextFromResources("config/drone/rc/drone_config_0");
@@ -184,7 +188,7 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
     // Update is called once per frame
     void Update()
     {
-        if (ibridge.GetState() == BridgeState.POSITIONING)
+        if (ibridge != null && ibridge.GetState() == BridgeState.POSITIONING)
         {
             return;
         }
@@ -256,7 +260,10 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
             unity_pos.x = -(float)y;
             unity_pos.y = (float)z;
             body.transform.position = unity_pos;
-            FlushPduPos(unity_pos);
+            if (useWebServer)
+            {
+                FlushPduPos(unity_pos);
+            }
         }
         double roll, pitch, yaw;
         ret = DroneServiceRC.GetAttitude(0, out roll, out pitch, out yaw);
@@ -275,9 +282,15 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
         if (ret == 0)
         {
             drone_propeller.Rotate((float)c1, (float)c2, (float)c3, (float)c4);
-            FlushPduPropeller((float)c1, (float)c2, (float)c3, (float)c4);
+            if (useWebServer)
+            {
+                FlushPduPropeller((float)c1, (float)c2, (float)c3, (float)c4);
+            }
         }
-        await GrabControlAsync();
+        if (baggage_grabber != null)
+        {
+            await GrabControlAsync();
+        }
     }
 
     private void OnApplicationQuit()
