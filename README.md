@@ -82,8 +82,8 @@ simulation/
   - 取得元：[OnShape](https://www.onshape.com/en/)
     - 参照URL：https://cad.onshape.com/documents/8302790419ef6b56cd1eb03c/w/dad3a9c868c42504811a0d26/e/c8d69131de8ac6383b17593b
 
-## `corn`：三角コーン
-- 3dモデル：`corn.fbx`
+## `pylon`：三角コーン
+- 3dモデル：`pylon.fbx`
   - 取得元：[3D屋さん](https://3dyasan.com/)
     - 参照URL：https://3dyasan.com/2021/05/10/pylon
 
