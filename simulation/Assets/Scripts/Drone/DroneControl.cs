@@ -39,6 +39,11 @@ namespace hakoniwa.drone
         private IDroneControlOp droneControlOp = null;
         public bool isPlayer = true;
 
+        public IDroneInput GetDroneInput()
+        {
+            return controller_input;
+        }
+
         public bool IsMagnetOn()
         {
             return magnet_on;

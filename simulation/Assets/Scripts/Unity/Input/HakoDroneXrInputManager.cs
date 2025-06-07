@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace hakoniwa.objects.core
@@ -92,6 +93,20 @@ namespace hakoniwa.objects.core
             //not supported
             return false;
         }
+
+        public void DoVibration(bool isRightHand, float frequency, float amplitude, float durationSec)
+        {
+            var controller = isRightHand ? OVRInput.Controller.RTouch : OVRInput.Controller.LTouch;
+            StartCoroutine(VibrateCoroutine(controller, frequency, amplitude, durationSec));
+        }
+
+        private IEnumerator VibrateCoroutine(OVRInput.Controller controller, float frequency, float amplitude, float durationSec)
+        {
+            OVRInput.SetControllerVibration(frequency, amplitude, controller);
+            yield return new WaitForSeconds(durationSec);
+            OVRInput.SetControllerVibration(0, 0, controller);
+        }
+
     }
 
 }
