@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using hakoniwa.pdu.msgs.hako_msgs;
 using hakoniwa.ar.bridge.sharesim;
 using hakoniwa.drone;
+using hakoniwa.objects.core.sensors;
 
 public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
 {
@@ -29,6 +30,7 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
     public string robotName = "Drone";
     public string pdu_name_propeller = "motor";
     public string pdu_name_pos = "pos";
+    private ICameraController camera_controller;
 
     private void SetPosition(Twist pos, UnityEngine.Vector3 unity_pos, UnityEngine.Vector3 unity_rot)
     {
@@ -167,6 +169,15 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
             {
                 throw new Exception("Can not Initialize DroneService RC with InitSingle: debug_logpath= " + debug_logpath);
             }
+        }
+        /*
+         * Camera
+         */
+        camera_controller = GetComponentInChildren<ICameraController>();
+        if (camera_controller != null)
+        {
+            Debug.Log("Camera is enabled");
+            camera_controller.Initialize();
         }
 
         // DroneServiceRC.Startの呼び出し
