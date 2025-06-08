@@ -1,15 +1,16 @@
-using UnityEngine;
+using hakoniwa.ar.bridge;
+using hakoniwa.ar.bridge.sharesim;
+using hakoniwa.drone;
 using hakoniwa.drone.service;
-using System;
+using hakoniwa.objects.core.sensors;
+using hakoniwa.pdu.core;
 using hakoniwa.pdu.interfaces;
 using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.pdu.msgs.hako_mavlink_msgs;
-using hakoniwa.ar.bridge;
-using System.Threading.Tasks;
 using hakoniwa.pdu.msgs.hako_msgs;
-using hakoniwa.ar.bridge.sharesim;
-using hakoniwa.drone;
-using hakoniwa.objects.core.sensors;
+using System;
+using System.Threading.Tasks;
+using UnityEngine;
 
 public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
 {
@@ -204,6 +205,10 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
             return;
         }
         drone_control.HandleInput();
+        if (camera_controller != null)
+        {
+            drone_control.HandleCameraControl(camera_controller, null);
+        }
     }
 
     private bool isGrabProcessing = false;
@@ -250,6 +255,13 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
                     }
                 }
             }
+        }
+    }
+    void LateUpdate()
+    {
+        if (camera_controller != null)
+        {
+            this.camera_controller.UpdateCameraAngle();
         }
     }
 

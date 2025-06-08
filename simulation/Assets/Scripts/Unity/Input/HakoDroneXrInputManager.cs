@@ -72,26 +72,26 @@ namespace hakoniwa.objects.core
 
         public bool IsUpButtonPressed()
         {
-            //not supported
-            return false;
+            // 左手トリガーを押した瞬間
+            return OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger);
         }
 
         public bool IsUpButtonReleased()
         {
-            //not supported
-            return false;
+            // 左手トリガーを離した瞬間
+            return OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger);
         }
 
         public bool IsDownButtonPressed()
         {
-            //not supported
-            return false;
+            // 右手トリガーを押した瞬間
+            return OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger);
         }
 
         public bool IsDownButtonReleased()
         {
-            //not supported
-            return false;
+            // 右手トリガーを離した瞬間
+            return OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger);
         }
 
         public void DoVibration(bool isRightHand, float frequency, float amplitude, float durationSec)

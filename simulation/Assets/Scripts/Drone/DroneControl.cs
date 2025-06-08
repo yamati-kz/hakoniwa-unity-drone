@@ -99,7 +99,7 @@ namespace hakoniwa.drone
                 /*
                  * Camera Image Rc request
                  */
-                if (controller_input.IsYButtonPressed())
+                if (controller_input.IsYButtonPressed() && pduManager != null)
                 {
                     Debug.Log("SHOT!!");
                     camera_controller.Scan();
