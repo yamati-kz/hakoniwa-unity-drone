@@ -12,7 +12,7 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
+public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject, IDroneDisturbableObject
 {
     public GameObject body;
     public int debuff_duration_msec = 100;
@@ -264,10 +264,11 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
             this.camera_controller.UpdateCameraAngle();
         }
     }
-
-
+    private UnityEngine.Vector3 rosWind;
+    private double temperature;
     private async void FixedUpdate()
     {
+        DroneServiceRC.PutDisturbance(0, temperature, rosWind.x, rosWind.y, rosWind.z);
         // 現在位置を記録
         for (int i = 0; i < 20; i++)
         {
@@ -320,5 +321,30 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
     {
         int ret = DroneServiceRC.Stop();
         Debug.Log("Stop: ret = " + ret);
+    }
+
+    private UnityEngine.Vector3 UnityToRos(UnityEngine.Vector3 unityVec)
+    {
+        return new UnityEngine.Vector3(
+            unityVec.x,
+            -unityVec.z,
+            unityVec.y
+        );
+    }
+
+    public void ApplyDisturbance(float temp, UnityEngine.Vector3 windVector)
+    {
+        Debug.Log("ApplyDisturbance: " + windVector);
+        rosWind = UnityToRos(windVector);
+        temperature = temp;
+    }
+
+    public void ResetDisturbance()
+    {
+        Debug.Log("ResetDisturbance: ");
+        rosWind.x = 0;
+        rosWind.y = 0;
+        rosWind.z = 0;
+        temperature = 20;
     }
 }

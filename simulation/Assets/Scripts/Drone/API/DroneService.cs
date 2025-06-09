@@ -262,6 +262,16 @@ namespace hakoniwa.drone.service
             }
             return false;
         }
+        /*
+         * Disturbance
+         */
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int drone_service_rc_put_disturbance(int index, double d_temp, double d_wind_x, double d_wind_y, double d_wind_z);
+
+        public static int PutDisturbance(int index, double temp, double windX, double windY, double windZ)
+        {
+            return drone_service_rc_put_disturbance(index, temp, windX, windY, windZ);
+        }
 
         /*
          * Collision
