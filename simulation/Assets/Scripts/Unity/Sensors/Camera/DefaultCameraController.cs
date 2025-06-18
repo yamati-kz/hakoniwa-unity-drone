@@ -58,6 +58,7 @@ namespace hakoniwa.objects.core.sensors
         public float move_step = 1.0f;  // 一回の動きのステップ量
         public float camera_move_button_threshold_speedup = 1.0f;
 
+        public MeshRenderer targetRenderer;
 
         public async void DelclarePdu(string robotName, IPduManager pduManager)
         {
@@ -94,6 +95,10 @@ namespace hakoniwa.objects.core.sensors
             var texture = new Texture2D(this.width, this.height, TextureFormat.RGB24, false);
             this.RenderTextureRef = new RenderTexture(texture.width, texture.height, 32);
             this.my_camera.targetTexture = this.RenderTextureRef;
+            if (targetRenderer != null)
+            {
+                targetRenderer.material.mainTexture = this.RenderTextureRef;
+            }
         }
 
         public void RotateCamera(float step)
@@ -105,18 +110,30 @@ namespace hakoniwa.objects.core.sensors
             newPitch = Mathf.Clamp(newPitch, this.camera_move_up_deg, this.camera_move_down_deg);
             manual_rotation_deg = newPitch;
         }
-
         public void Scan()
         {
-            tex = new Texture2D(RenderTextureRef.width, RenderTextureRef.height, TextureFormat.RGB24, false);
             RenderTexture.active = RenderTextureRef;
             int width = RenderTextureRef.width;
             int height = RenderTextureRef.height;
             int step = width * 3;
+
+            if (tex == null || tex.width != width || tex.height != height)
+            {
+                if (tex != null)
+                {
+                    UnityEngine.Object.Destroy(tex);
+                }
+                tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+            }
+
             tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
             tex.Apply();
             byte[] _byte = tex.GetRawTextureData();
-            raw_bytes = new byte[_byte.Length];
+            // raw_bytes バッファを使い回す（必要に応じて作り直す）
+            if (raw_bytes == null || raw_bytes.Length != _byte.Length)
+            {
+                raw_bytes = new byte[_byte.Length];
+            }
             for (int i = 0; i < height; i++)
             {
                 System.Array.Copy(_byte, i * step, raw_bytes, (height - i - 1) * step, step);
@@ -131,7 +148,6 @@ namespace hakoniwa.objects.core.sensors
             {
                 compressed_bytes = tex.EncodeToJPG();
             }
-            UnityEngine.Object.Destroy(tex);
         }
 
         public void SetCameraAngle(float angle)

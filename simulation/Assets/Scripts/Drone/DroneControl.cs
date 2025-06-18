@@ -39,6 +39,11 @@ namespace hakoniwa.drone
         private IDroneControlOp droneControlOp = null;
         public bool isPlayer = true;
 
+        public IDroneInput GetDroneInput()
+        {
+            return controller_input;
+        }
+
         public bool IsMagnetOn()
         {
             return magnet_on;
@@ -94,7 +99,7 @@ namespace hakoniwa.drone
                 /*
                  * Camera Image Rc request
                  */
-                if (controller_input.IsYButtonPressed())
+                if (controller_input.IsYButtonPressed() && pduManager != null)
                 {
                     Debug.Log("SHOT!!");
                     camera_controller.Scan();

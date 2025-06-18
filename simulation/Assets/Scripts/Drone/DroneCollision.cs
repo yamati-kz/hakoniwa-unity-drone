@@ -43,6 +43,8 @@ namespace hakoniwa.drone
         private LayerMask collisionLayer; // 衝突を検出するレイヤー
         [SerializeField]
         private bool isHakoniwa = false;
+        public DroneControl vibration;
+        private IDroneInput vibrationObject;
 
         private DroneImpulseCollision impluse_collision = new DroneImpulseCollision();
         public DroneImpulseCollision GetImpulseCollision()
@@ -73,6 +75,22 @@ namespace hakoniwa.drone
 
         private void OnTriggerEnter(Collider other)
         {
+            if (vibration != null)
+            {
+                if (vibrationObject == null)
+                {
+                    vibrationObject = vibration.GetDroneInput();
+                    if (vibrationObject != null)
+                    {
+                        Debug.Log("Vibration is enabled");
+                    }
+                    else
+                    {
+                        Debug.Log("Vibration is disabled");
+                    }
+                }
+            }
+
             // レイヤーマスクに基づいて対象をフィルタリング
             if (IsLayerInMask(other.gameObject.layer, collisionLayer))
             {
@@ -81,6 +99,21 @@ namespace hakoniwa.drone
                 {
                     Debug.Log("Info: " + this.pos_obj.name + " collided with " + info.GetName());
                     HandleTriggerImpulseCollision(info, other);
+                }
+                if (vibrationObject != null)
+                {
+                    vibrationObject.DoVibration(
+                        isRightHand: true,
+                        frequency: 0.9f,   // 低めで重い感触
+                        amplitude: 1.0f,   // 強め
+                        durationSec: 0.2f  // 短く強調
+                     );
+                    vibrationObject.DoVibration(
+                        isRightHand: false,
+                        frequency: 0.9f,   // 低めで重い感触
+                        amplitude: 1.0f,   // 強め
+                        durationSec: 0.2f  // 短く強調
+                     );
                 }
             }
         }

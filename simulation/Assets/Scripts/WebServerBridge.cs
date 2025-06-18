@@ -22,6 +22,8 @@ public class WebServerBridge : MonoBehaviour, IHakoPduInstance
     private string pduConfigPath = ".";
     [SerializeField]
     private string customJsonFilePath = "./custom.json";
+    [SerializeField]
+    private string filesystemÅQtype = "unity";
     private void Awake()
     {
         if (Instance == null)
@@ -53,7 +55,7 @@ public class WebServerBridge : MonoBehaviour, IHakoPduInstance
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
-        service = EnvironmentServiceFactory.Create("websocket_dotnet", "local", ".");
+        service = EnvironmentServiceFactory.Create("websocket_dotnet", filesystemÅQtype, ".");
         if (service == null)
         {
             throw new System.Exception("Can not create service...");
