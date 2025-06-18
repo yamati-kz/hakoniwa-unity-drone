@@ -23,15 +23,15 @@ public class WebServerBridge : MonoBehaviour, IHakoPduInstance
     [SerializeField]
     private string customJsonFilePath = "./custom.json";
     [SerializeField]
-    private string filesystemÅQtype = "unity";
+    private string filesystem_type = "unity";
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // ÉVÅ[ÉìÇÇ‹ÇΩÇ¢Ç≈ï€éù
+            DontDestroyOnLoad(gameObject); // ?V?[????????????????
         }
-        else if (!ReferenceEquals(Instance, this)) // Unity ì¡óLÇÃî‰ärÇÃåxçêÇîÇØÇÈ
+        else if (!ReferenceEquals(Instance, this)) // Unity ???L?????r???x??????????
         {
             Destroy(gameObject);
         }
@@ -55,7 +55,7 @@ public class WebServerBridge : MonoBehaviour, IHakoPduInstance
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
-        service = EnvironmentServiceFactory.Create("websocket_dotnet", filesystemÅQtype, ".");
+        service = EnvironmentServiceFactory.Create("websocket_dotnet", filesystem_type, ".");
         if (service == null)
         {
             throw new System.Exception("Can not create service...");
