@@ -9,5 +9,6 @@ namespace hakoniwa.objects.core
         public uint get_status();
         public uint get_cycles();
         public double get_temperature();
+        public double get_atmospheric_pressure();
     }
 }

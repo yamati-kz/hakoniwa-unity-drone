@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldExpo/Player1.unity
     guid: 13307426737984d47acb2add797b6592
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: b2178a7245e5c214180d69d16fc4b9a6, type: 2}
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: c4537d3b55fe34463b083364cc186d6f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 08bb70a8cca0e4a0d8a347fdf332c051, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 33769eb49ffa9bb429a2dce4fabaedc6, type: 2}
   m_UseUCBPForAssetBundles: 0

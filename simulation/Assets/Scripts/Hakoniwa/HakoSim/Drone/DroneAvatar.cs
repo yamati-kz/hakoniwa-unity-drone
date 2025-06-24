@@ -3,6 +3,7 @@ using hakoniwa.objects.core;
 using hakoniwa.pdu.interfaces;
 using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.pdu.msgs.hako_mavlink_msgs;
+using hakoniwa.pdu.msgs.hako_msgs;
 using hakoniwa.sim;
 using hakoniwa.sim.core;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace hakoniwa.drone.sim
         public string pdu_name_touch_sensor = "baggage_sensor";
         public string pdu_name_collision = "impulse";
         public string pdu_name_battery = "battery";
+        public string pdu_name_disturbance = "disturb";
         public bool useBattery = true;
         public GameObject body;
         public Rigidbody rd;
@@ -30,6 +32,9 @@ namespace hakoniwa.drone.sim
         private GameController gameController;
         private DroneConfig droneConfig;
         private LiDAR3DController[] lidars;
+        private Wind wind;
+        public double sea_level_atm = 1.0;
+        public double sea_level_temperature = 15.0;
 
         private DronePropeller drone_propeller;
 
@@ -158,6 +163,18 @@ namespace hakoniwa.drone.sim
                 foreach(var lidar in lidars)
                 {
                     lidar.DoInitialize(robotName, hakoPdu);
+                }
+            }
+            /*
+             * Disturbance
+             */
+            wind = this.GetComponentInChildren<Wind>();
+            if (wind != null)
+            {
+                ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_disturbance);
+                if (ret == false)
+                {
+                    throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_disturbance}");
                 }
             }
         }
@@ -304,6 +321,32 @@ namespace hakoniwa.drone.sim
                     lidar.DoControl(pduManager);
                 }
             }
+            /*
+             * Disturbance
+             */ 
+            if (wind != null)
+            {
+                IPdu pdu_disturb = pduManager.ReadPdu(robotName, pdu_name_disturbance);
+                if (pdu_disturb == null)
+                {
+                    Debug.Log("Can not get pdu of pdu_disturb");
+                }
+                else
+                {
+                    Disturbance disturb = new Disturbance(pdu_disturb);
+                    UnityEngine.Vector3 wind_dir = new UnityEngine.Vector3(
+                        -(float)disturb.d_wind.value.y,
+                        (float)disturb.d_wind.value.z,
+                        (float)disturb.d_wind.value.x
+                        );
+                    wind.wind_direction = wind_dir;
+                    sea_level_temperature = disturb.d_temp.value;
+                    sea_level_atm = disturb.d_atm.sea_level_atm;
+                    //Debug.Log("sea_leve_atm = " + sea_level_atm);
+                }
+
+            }
+
         }
         public bool enableLerp = false;
         private void UpdatePosition(Twist pos)
@@ -341,8 +384,6 @@ namespace hakoniwa.drone.sim
                 this.rd.MovePosition(unity_pos);
                 this.rd.MoveRotation(targetRotation);
             }
-
-
         }
 
         public double get_full_voltage()
@@ -399,6 +440,17 @@ namespace hakoniwa.drone.sim
         UnityEngine.Vector3 IMovableObject.GetEulerDeg()
         {
             return this.body.transform.eulerAngles;
+        }
+        // 外部から設定される高度（m）
+        public double Altitude = 121.321;
+
+        public double get_atmospheric_pressure()
+        {
+            return AtmosphericPressure.PascalToAtm(
+                AtmosphericPressure.ConvertAltToBaro(
+                    Altitude + this.transform.position.y,
+                    sea_level_atm,
+                    sea_level_temperature));
         }
     }
 }

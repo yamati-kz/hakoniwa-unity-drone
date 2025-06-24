@@ -335,4 +335,9 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
         }
         return 0;
     }
+
+    public double get_atmospheric_pressure()
+    {
+        return 1.0;
+    }
 }

@@ -210,5 +210,10 @@ namespace hakoniwa.drone
         {
             return body.transform.eulerAngles;
         }
+
+        public double get_atmospheric_pressure()
+        {
+            return 1.0;
+        }
     }
 }
