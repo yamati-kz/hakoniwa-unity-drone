@@ -5,6 +5,7 @@ using hakoniwa.objects.core.sensors;
 using hakoniwa.pdu.interfaces;
 using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.pdu.msgs.hako_mavlink_msgs;
+using hakoniwa.pdu.msgs.hako_msgs;
 using hakoniwa.sim;
 using NUnit.Framework;
 using System;
@@ -18,6 +19,7 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
     public string pdu_name_propeller = "motor";
     public string pdu_name_pos = "pos";
     public string pdu_name_collision = "impulse";
+    public string pdu_name_disturbance = "disturb";
     private DroneCollision drone_collision;
     public GameObject body;
     private DronePropeller drone_propeller;
@@ -28,7 +30,9 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
     public DroneCameraController camera_controller;
     private DroneConfig droneConfig;
     private ILiDAR3DController[] lidars;
-
+    private Wind wind;
+    public double sea_level_atm = 1.0;
+    public double sea_level_temperature = 15.0;
     void Start()
     {
         if (body == null)
@@ -178,6 +182,27 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
                 pduManager.FlushNamedPdu(pdu_col);
             }
         }
+        /*
+         * Disturbance
+         */
+        if (wind != null)
+        {
+            IPdu pdu_disturb = pduManager.ReadPdu(robotName, pdu_name_disturbance);
+            if (pdu_disturb != null)
+            {
+                Disturbance disturb = new Disturbance(pdu_disturb);
+                UnityEngine.Vector3 wind_dir = new UnityEngine.Vector3(
+                    -(float)disturb.d_wind.value.y,
+                    (float)disturb.d_wind.value.z,
+                    (float)disturb.d_wind.value.x
+                    );
+                wind.wind_direction = wind_dir;
+                sea_level_temperature = disturb.d_temp.value;
+                sea_level_atm = disturb.d_atm.sea_level_atm;
+                Debug.Log("sea_leve_atm = " + sea_level_atm);
+            }
+
+        }
 
     }
     void Update()
@@ -287,6 +312,19 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
                 lidar.DoInitialize(robotName, pdu_manager);
             }
         }
+        /*
+         * Disturbance
+         */
+        wind = this.GetComponentInChildren<Wind>();
+        if (wind != null)
+        {
+            ret = await pdu_manager.DeclarePduForRead(robotName, pdu_name_disturbance);
+            if (ret == false)
+            {
+                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_disturbance}");
+            }
+            Debug.Log("Disturbance pdu for read is success: " + robotName + "/" +  pdu_name_disturbance);
+        }
 
     }
 
@@ -336,8 +374,15 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
         return 0;
     }
 
+    // 外部から設定される高度（m）
+    public double Altitude = 121.321;
+
     public double get_atmospheric_pressure()
     {
-        return 1.0;
+        return AtmosphericPressure.PascalToAtm(
+            AtmosphericPressure.ConvertAltToBaro(
+                Altitude + this.transform.position.y,
+                sea_level_atm,
+                sea_level_temperature));
     }
 }

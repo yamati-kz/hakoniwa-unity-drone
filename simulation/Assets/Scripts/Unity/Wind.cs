@@ -15,9 +15,6 @@ namespace hakoniwa.objects.core
         public float maxRotateSpeed = 10.0f;
         public float maxWindStrength = 2.0f;
 
-        public Color colorNoWind = Color.white;
-        public Color colorWithWind = Color.red;
-
         void Update()
         {
             if (stick == null || drone == null || wind_state == null)
@@ -64,13 +61,6 @@ namespace hakoniwa.objects.core
                 }
             }
 
-
-            // 色を白 or 赤で明確に切り替え
-            var renderer = wind_state.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.material.color = colorWithWind;
-            }
         }
     }
 
