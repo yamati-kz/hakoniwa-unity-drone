@@ -981,7 +981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robotName: Drone
   input_type: 0
-  stick_strength: 0.1
+  stick_strength: 0.5
   stick_yaw_strength: 1
   magnet_on: 0
   grabberObject: {fileID: 518520627}

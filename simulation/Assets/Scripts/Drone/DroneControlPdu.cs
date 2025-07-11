@@ -15,6 +15,7 @@ namespace hakoniwa.drone
         public const int game_ops_arm_button_index = 0;
         public const int game_ops_grab_baggage_button_index = 1;
         public const int game_ops_camera_button_index = 2;
+        public const int game_ops_flight_mode_change_index = 3;
         public const int game_ops_camera_move_up_index = 11;
         public const int game_ops_camera_move_down_index = 12;
 
@@ -178,6 +179,13 @@ namespace hakoniwa.drone
         {
             status_magnet_magnet_on = magnet_on;
             status_magnet_contact_on = contact_on;
+        }
+
+        public int PutFlightModeChangeButton(int index, int value)
+        {
+            Debug.Log("PutFlightModeChangeButton: value = " + value);
+            button[game_ops_flight_mode_change_index] = (value != 0);
+            return 0;
         }
     }
 

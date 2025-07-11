@@ -199,7 +199,7 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
                 wind.wind_direction = wind_dir;
                 sea_level_temperature = disturb.d_temp.value;
                 sea_level_atm = disturb.d_atm.sea_level_atm;
-                Debug.Log("sea_leve_atm = " + sea_level_atm);
+                //Debug.Log("sea_leve_atm = " + sea_level_atm);
             }
 
         }

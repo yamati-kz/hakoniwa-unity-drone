@@ -16,6 +16,7 @@ namespace hakoniwa.drone
     {
         public void DoInitialize(string robotName);
         public int PutRadioControlButton(int index, int value);
+        public int PutFlightModeChangeButton(int index, int value);
         public int PutHorizontal(int index, double value);
         public int PutForward(int index, double value);
         public int PutHeading(int index, double value);
@@ -173,6 +174,14 @@ namespace hakoniwa.drone
             else if (controller_input.IsAButtonReleased())
             {
                 droneControlOp.PutRadioControlButton(0, 0);
+            }
+            if (controller_input.IsXButtonPressed())
+            {
+                droneControlOp.PutFlightModeChangeButton(0, 1);
+            }
+            else if (controller_input.IsXButtonReleased())
+            {
+                droneControlOp.PutFlightModeChangeButton(0, 0);
             }
             if (controller_input.IsBButtonReleased())
             {

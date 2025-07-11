@@ -22,6 +22,7 @@ namespace hakoniwa.drone
             return false;
         }
 
+
         public int PutForward(int index, double value)
         {
             return DroneServiceRC.PutForward(index, value);
@@ -45,6 +46,10 @@ namespace hakoniwa.drone
         public int PutRadioControlButton(int index, int value)
         {
             return DroneServiceRC.PutRadioControlButton(index, value);
+        }
+        public int PutFlightModeChangeButton(int index, int value)
+        {
+            return DroneServiceRC.PutModeChangeButton(index, value);
         }
 
         public int PutVertical(int index, double value)

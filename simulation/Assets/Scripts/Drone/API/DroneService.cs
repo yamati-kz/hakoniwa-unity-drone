@@ -168,6 +168,13 @@ namespace hakoniwa.drone.service
         {
             return drone_service_rc_put_radio_control_button(index, value);
         }
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int drone_service_rc_put_mode_change_button(int index, int value);
+
+        public static int PutModeChangeButton(int index, int value)
+        {
+            return drone_service_rc_put_mode_change_button(index, value);
+        }
 
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         private static extern int drone_service_rc_put_magnet_control_button(int index, int value);
@@ -192,7 +199,13 @@ namespace hakoniwa.drone.service
         {
             return drone_service_rc_put_home_control_button(index, value);
         }
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int drone_service_rc_get_flight_mode(int index, out int mode);
 
+        public static int GetFlightMode(int index, out int mode)
+        {
+            return drone_service_rc_get_flight_mode(index, out mode);
+        }
         /*
          * Get Position and Attitude
          */
