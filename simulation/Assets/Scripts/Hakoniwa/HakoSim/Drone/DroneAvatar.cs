@@ -38,6 +38,7 @@ namespace hakoniwa.drone.sim
         public double sea_level_temperature = 15.0;
         public DroneLedController[] leds;
         public FlightModeLedController[] flight_mode_leds;
+        public PropellerWindController[] propeller_winds;
 
         private DronePropeller drone_propeller;
 
@@ -202,6 +203,17 @@ namespace hakoniwa.drone.sim
                 foreach (var led in flight_mode_leds)
                 {
                     led.SetMode(FlightModeLedController.FlightMode.GPS);
+                }
+
+            }
+            /*
+             * Propeller Winds
+             */
+            if (propeller_winds.Length > 0)
+            {
+                foreach (var wind in propeller_winds)
+                {
+                    wind.SetWindVelocityFromRos(UnityEngine.Vector3.zero);
                 }
 
             }
@@ -383,7 +395,7 @@ namespace hakoniwa.drone.sim
             if (pdu_status != null)
             {
                 DroneStatus drone_status = new DroneStatus(pdu_status);
-                Debug.Log("internal_state: " + drone_status.internal_state);
+                //Debug.Log("internal_state: " + drone_status.internal_state);
                 /*
                  * Leds
                  */
@@ -430,7 +442,22 @@ namespace hakoniwa.drone.sim
                             led.SetMode(FlightModeLedController.FlightMode.GPS);
                         }
                     }
-
+                }
+                /*
+                 * Propeller Winds
+                 */
+                if (propeller_winds.Length > 0)
+                {
+                    UnityEngine.Vector3 w = new UnityEngine.Vector3(
+                        (float)drone_status.propeller_wind.x,
+                        (float)drone_status.propeller_wind.y,
+                        (float)drone_status.propeller_wind.z
+                    );
+                    Debug.Log("Wind: " + w);
+                    foreach (var wind in propeller_winds)
+                    {
+                        wind.SetWindVelocityFromRos(w);
+                    }
                 }
 
             }
