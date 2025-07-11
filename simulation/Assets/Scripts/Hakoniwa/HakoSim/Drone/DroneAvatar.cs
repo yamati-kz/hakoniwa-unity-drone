@@ -20,6 +20,7 @@ namespace hakoniwa.drone.sim
         public string pdu_name_collision = "impulse";
         public string pdu_name_battery = "battery";
         public string pdu_name_disturbance = "disturb";
+        public string pdu_name_status = "status";
         public bool useBattery = true;
         public GameObject body;
         public Rigidbody rd;
@@ -35,6 +36,8 @@ namespace hakoniwa.drone.sim
         private Wind wind;
         public double sea_level_atm = 1.0;
         public double sea_level_temperature = 15.0;
+        public DroneLedController[] leds;
+        public FlightModeLedController[] flight_mode_leds;
 
         private DronePropeller drone_propeller;
 
@@ -177,6 +180,32 @@ namespace hakoniwa.drone.sim
                     throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_disturbance}");
                 }
             }
+            /*
+             * Drone Status
+             */
+            ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_status);
+            if (ret == false)
+            {
+                throw new ArgumentException($"Can not declare pdu for read: {robotName} {pdu_name_status}");
+            }
+            /*
+             * Leds
+             */
+            if (leds.Length > 0)
+            {
+                foreach (var led in leds) {
+                    led.SetMode(DroneLedController.DroneMode.DISARM);
+                }
+            }
+            if (flight_mode_leds.Length > 0)
+            {
+                foreach (var led in flight_mode_leds)
+                {
+                    led.SetMode(FlightModeLedController.FlightMode.GPS);
+                }
+
+            }
+
         }
 
         public void EventReset()
@@ -216,7 +245,7 @@ namespace hakoniwa.drone.sim
                 //Debug.Log($"Twist ({pos.linear.x} {pos.linear.y} {pos.linear.z})");
                 UpdatePosition(pos);
             }
-
+            float propellerRotation = 0;
             if (drone_propeller)
             {
                 /*
@@ -232,6 +261,7 @@ namespace hakoniwa.drone.sim
                     HakoHilActuatorControls propeller = new HakoHilActuatorControls(pdu_propeller);
                     //Debug.Log("c1: " + propeller.controls[0]);
                     drone_propeller.Rotate((float)propeller.controls[0], (float)propeller.controls[1], (float)propeller.controls[2], (float)propeller.controls[3]);
+                    propellerRotation = (float)propeller.controls[0];
                 }
             }
             /*
@@ -346,7 +376,64 @@ namespace hakoniwa.drone.sim
                 }
 
             }
+            /*
+             * Drone Status
+             */
+            IPdu pdu_status = pduManager.ReadPdu(robotName, pdu_name_status);
+            if (pdu_status != null)
+            {
+                DroneStatus drone_status = new DroneStatus(pdu_status);
+                Debug.Log("internal_state: " + drone_status.internal_state);
+                /*
+                 * Leds
+                 */
+                if (leds.Length > 0)
+                {
+                    if (propellerRotation > 0)
+                    {
+                        foreach (var led in leds)
+                        {
+                            switch (drone_status.internal_state)
+                            {
+                                case 0:
+                                    led.SetMode(DroneLedController.DroneMode.TAKEOFF);
+                                    break;
+                                case 1:
+                                    led.SetMode(DroneLedController.DroneMode.HOVER);
+                                    break;
+                                case 2:
+                                    led.SetMode(DroneLedController.DroneMode.LANDING);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var led in leds)
+                        {
+                            led.SetMode(DroneLedController.DroneMode.DISARM);
+                        }
+                    }
+                }
+                if (flight_mode_leds.Length > 0)
+                {
+                    foreach (var led in flight_mode_leds)
+                    {
+                        if (drone_status.flight_mode == 0)
+                        {
+                            led.SetMode(FlightModeLedController.FlightMode.ATTI);
+                        }
+                        else
+                        {
+                            led.SetMode(FlightModeLedController.FlightMode.GPS);
+                        }
+                    }
 
+                }
+
+            }
         }
         public bool enableLerp = false;
         private void UpdatePosition(Twist pos)

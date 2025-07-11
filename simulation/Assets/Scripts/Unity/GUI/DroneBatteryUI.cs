@@ -41,7 +41,7 @@ namespace hakoniwa.objects.core
             if (pressureText != null)
             {
                 pressureText.text = pressure.ToString("F1");
-                Debug.Log("preassure: " + pressure);
+                //Debug.Log("preassure: " + pressure);
             }
             percentageText.text = percentValue.ToString("F1");
             Color color = Color.white;

@@ -42,6 +42,10 @@ namespace hakoniwa.drone.sim
         public void DoInitialize(string robot_name, IHakoPdu hakoPdu)
         {
             this.robotName = robot_name;
+            if (controller == null)
+            {
+                throw new Exception("Can not find ICameraController");
+            }
             this.controller.DelclarePdu(robotName, null);
             var ret = hakoPdu.DeclarePduForRead(robotName, pdu_name_cmd_camera);
             if (ret == false)
