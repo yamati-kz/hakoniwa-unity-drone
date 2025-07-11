@@ -1,8 +1,9 @@
-using UnityEngine;
 using hakoniwa.drone.service;
-using System;
-using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.objects.core;
+using hakoniwa.pdu.msgs.geometry_msgs;
+using hakoniwa.pdu.msgs.hako_msgs;
+using System;
+using UnityEngine;
 
 namespace hakoniwa.drone
 {
@@ -21,6 +22,8 @@ namespace hakoniwa.drone
         public string robotName = "Drone";
         public string pdu_name_propeller = "motor";
         public string pdu_name_pos = "pos";
+        public DroneLedController[] leds;
+        public FlightModeLedController[] flight_mode_leds;
 
         private void SetPosition(Twist pos, UnityEngine.Vector3 unity_pos, UnityEngine.Vector3 unity_rot)
         {
@@ -87,6 +90,23 @@ namespace hakoniwa.drone
                     throw new Exception("Can not Initialize DroneService RC with InitSingle: debug_logpath= " + debug_logpath);
                 }
             }
+            /*
+             * Leds
+             */
+            if (leds.Length > 0)
+            {
+                foreach (var led in leds)
+                {
+                    led.SetMode(DroneLedController.DroneMode.DISARM);
+                }
+            }
+            if (flight_mode_leds.Length > 0)
+            {
+                foreach (var led in flight_mode_leds)
+                {
+                    led.SetMode(FlightModeLedController.FlightMode.GPS);
+                }
+            }
 
             // DroneServiceRC.Startの呼び出し
             ret = DroneServiceRC.Start();
@@ -143,6 +163,7 @@ namespace hakoniwa.drone
                 body.transform.rotation = rotation;
             }
 
+            float propellerRotation = 0;
             if (drone_propeller != null)
             {
                 double c1, c2, c3, c4, c5, c6, c7, c8;
@@ -151,9 +172,60 @@ namespace hakoniwa.drone
                 {
                     drone_propeller.Rotate((float)c1, (float)c2, (float)c3, (float)c4);
                 }
-
+                propellerRotation = (float)c1;
             }
             RunBatteryStatus();
+            /*
+             * Leds
+             */
+            int internal_state;
+            int flight_mode;
+            DroneServiceRC.GetInternalState(0, out internal_state);
+            DroneServiceRC.GetFlightMode(0, out flight_mode);
+            if (leds.Length > 0)
+            {
+                if (propellerRotation > 0)
+                {
+                    foreach (var led in leds)
+                    {
+                        switch (internal_state)
+                        {
+                            case 0:
+                                led.SetMode(DroneLedController.DroneMode.TAKEOFF);
+                                break;
+                            case 1:
+                                led.SetMode(DroneLedController.DroneMode.HOVER);
+                                break;
+                            case 2:
+                                led.SetMode(DroneLedController.DroneMode.LANDING);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var led in leds)
+                    {
+                        led.SetMode(DroneLedController.DroneMode.DISARM);
+                    }
+                }
+            }
+            if (flight_mode_leds.Length > 0)
+            {
+                foreach (var led in flight_mode_leds)
+                {
+                    if (flight_mode == 0)
+                    {
+                        led.SetMode(FlightModeLedController.FlightMode.ATTI);
+                    }
+                    else
+                    {
+                        led.SetMode(FlightModeLedController.FlightMode.GPS);
+                    }
+                }
+            }
         }
         private hakoniwa.drone.service.DroneServiceRC.BatteryStatus battery_status;
         private void RunBatteryStatus()

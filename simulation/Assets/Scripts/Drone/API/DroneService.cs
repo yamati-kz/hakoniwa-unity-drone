@@ -206,6 +206,13 @@ namespace hakoniwa.drone.service
         {
             return drone_service_rc_get_flight_mode(index, out mode);
         }
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int drone_service_rc_get_internal_state(int index, out int state);
+
+        public static int GetInternalState(int index, out int state)
+        {
+            return drone_service_rc_get_internal_state(index, out state);
+        }
         /*
          * Get Position and Attitude
          */
