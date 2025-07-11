@@ -22012,7 +22012,7 @@ GameObject:
   - component: {fileID: 2089858774}
   - component: {fileID: 2089858773}
   m_Layer: 0
-  m_Name: Celing (1)
+  m_Name: Celing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
