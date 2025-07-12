@@ -2,6 +2,7 @@ using hakoniwa.ar.bridge;
 using hakoniwa.ar.bridge.sharesim;
 using hakoniwa.drone;
 using hakoniwa.drone.service;
+using hakoniwa.objects.core;
 using hakoniwa.objects.core.sensors;
 using hakoniwa.pdu.core;
 using hakoniwa.pdu.interfaces;
@@ -32,6 +33,9 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject, IDroneDisturb
     public string pdu_name_propeller = "motor";
     public string pdu_name_pos = "pos";
     private ICameraController camera_controller;
+    public DroneLedController[] leds;
+    public FlightModeLedController[] flight_mode_leds;
+    public PropellerWindController[] propeller_winds;
 
     private void SetPosition(Twist pos, UnityEngine.Vector3 unity_pos, UnityEngine.Vector3 unity_rot)
     {
@@ -181,6 +185,33 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject, IDroneDisturb
             camera_controller.Initialize();
         }
 
+        /*
+         * Leds
+         */
+        if (leds.Length > 0)
+        {
+            foreach (var led in leds)
+            {
+                led.SetMode(DroneLedController.DroneMode.DISARM);
+            }
+        }
+        if (flight_mode_leds.Length > 0)
+        {
+            foreach (var led in flight_mode_leds)
+            {
+                led.SetMode(FlightModeLedController.FlightMode.GPS);
+            }
+        }
+        /*
+         * Propeller Winds
+         */
+        if (propeller_winds.Length > 0)
+        {
+            foreach (var wind in propeller_winds)
+            {
+                wind.SetWindVelocityFromRos(UnityEngine.Vector3.zero);
+            }
+        }
         // DroneServiceRC.Startの呼び出し
         ret = DroneServiceRC.Start();
         Debug.Log("Start: ret = " + ret);
@@ -314,6 +345,70 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject, IDroneDisturb
         if (baggage_grabber != null)
         {
             await GrabControlAsync();
+        }
+        /*
+         * Leds
+         */
+        int internal_state;
+        int flight_mode;
+        DroneServiceRC.GetInternalState(0, out internal_state);
+        DroneServiceRC.GetFlightMode(0, out flight_mode);
+        if (leds.Length > 0)
+        {
+            if (c1 > 0)
+            {
+                foreach (var led in leds)
+                {
+                    switch (internal_state)
+                    {
+                        case 0:
+                            led.SetMode(DroneLedController.DroneMode.TAKEOFF);
+                            break;
+                        case 1:
+                            led.SetMode(DroneLedController.DroneMode.HOVER);
+                            break;
+                        case 2:
+                            led.SetMode(DroneLedController.DroneMode.LANDING);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var led in leds)
+                {
+                    led.SetMode(DroneLedController.DroneMode.DISARM);
+                }
+            }
+        }
+        if (flight_mode_leds.Length > 0)
+        {
+            foreach (var led in flight_mode_leds)
+            {
+                if (flight_mode == 0)
+                {
+                    led.SetMode(FlightModeLedController.FlightMode.ATTI);
+                }
+                else
+                {
+                    led.SetMode(FlightModeLedController.FlightMode.GPS);
+                }
+            }
+        }
+        /*
+         * Propeller wind
+         */
+        if (propeller_winds.Length > 0)
+        {
+            UnityEngine.Vector3 rosWind = UnityEngine.Vector3.zero;
+            DroneServiceRC.GetPropellerWind(0, out rosWind);
+            //Debug.Log("rosWind: " + rosWind);
+            foreach (var wind in propeller_winds)
+            {
+                wind.SetWindVelocityFromRos(rosWind);
+            }
         }
     }
 

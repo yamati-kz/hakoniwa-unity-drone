@@ -41,7 +41,7 @@
             "enable_disturbance": true,
             "manual_control": false,
             "airFrictionCoefficient": [
-                0.5,
+                0.7,
                 0.0
             ],
             "inertia": [
@@ -65,7 +65,7 @@
                 0,
                 0
             ],
-            "body_boundary_disturbance_power": 1.0
+            "body_boundary_disturbance_power": 4.0
         },
         "battery": {
             "vendor": "None",

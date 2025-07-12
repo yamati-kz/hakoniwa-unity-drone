@@ -275,7 +275,6 @@ public class DroneAvatarWeb : MonoBehaviour, IHakoniwaWebObject, IDroneBatterySt
                     (float)drone_status.propeller_wind.y,
                     (float)drone_status.propeller_wind.z
                 );
-                Debug.Log("Wind: " + w);
                 foreach (var wind in propeller_winds)
                 {
                     wind.SetWindVelocityFromRos(w);

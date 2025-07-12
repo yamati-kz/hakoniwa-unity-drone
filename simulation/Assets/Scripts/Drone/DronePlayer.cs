@@ -3,6 +3,7 @@ using hakoniwa.objects.core;
 using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.pdu.msgs.hako_msgs;
 using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace hakoniwa.drone
@@ -24,6 +25,7 @@ namespace hakoniwa.drone
         public string pdu_name_pos = "pos";
         public DroneLedController[] leds;
         public FlightModeLedController[] flight_mode_leds;
+        public PropellerWindController[] propeller_winds;
 
         private void SetPosition(Twist pos, UnityEngine.Vector3 unity_pos, UnityEngine.Vector3 unity_rot)
         {
@@ -107,7 +109,16 @@ namespace hakoniwa.drone
                     led.SetMode(FlightModeLedController.FlightMode.GPS);
                 }
             }
-
+            /*
+             * Propeller Winds
+             */
+            if (propeller_winds.Length > 0)
+            {
+                foreach (var wind in propeller_winds)
+                {
+                    wind.SetWindVelocityFromRos(UnityEngine.Vector3.zero);
+                }
+            }
             // DroneServiceRC.Startの呼び出し
             ret = DroneServiceRC.Start();
             Debug.Log("Start: ret = " + ret);
@@ -224,6 +235,19 @@ namespace hakoniwa.drone
                     {
                         led.SetMode(FlightModeLedController.FlightMode.GPS);
                     }
+                }
+            }
+            /*
+             * Propeller wind
+             */
+            if (propeller_winds.Length > 0)
+            {
+                UnityEngine.Vector3 rosWind = UnityEngine.Vector3.zero;
+                DroneServiceRC.GetPropellerWind(0, out rosWind);
+                //Debug.Log("rosWind: " + rosWind);
+                foreach (var wind in propeller_winds)
+                {
+                    wind.SetWindVelocityFromRos(rosWind);
                 }
             }
         }
