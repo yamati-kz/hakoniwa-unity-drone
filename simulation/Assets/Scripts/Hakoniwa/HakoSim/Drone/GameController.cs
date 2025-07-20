@@ -22,11 +22,6 @@ namespace hakoniwa.drone.sim
             }
         }
         private bool is_radio_control = false;
-        private int game_ops_arm_button_index = 0;
-        private int game_ops_grab_baggage_button_index = 1;
-        private int game_ops_camera_button_index = 2;
-        private int game_ops_camera_move_up_index = 11;
-        private int game_ops_camera_move_down_index = 12;
 
         public string pdu_name_cmd_game = "hako_cmd_game";
         private string robotName;
@@ -34,19 +29,19 @@ namespace hakoniwa.drone.sim
 
         public bool GetGrabBaggageOn()
         {
-            return button_array[game_ops_grab_baggage_button_index];
+            return button_array[DroneControlPdu.game_ops_grab_baggage_button_index];
         }
         public bool GetCameraShotOn()
         {
-            return button_array[game_ops_camera_button_index];
+            return button_array[DroneControlPdu.game_ops_camera_button_index];
         }
         public bool GetCameraMoveUp()
         {
-            return button_array[game_ops_camera_move_up_index];
+            return button_array[DroneControlPdu.game_ops_camera_move_up_index];
         }
         public bool GetCameraMoveDown()
         {
-            return button_array[game_ops_camera_move_down_index];
+            return button_array[DroneControlPdu.game_ops_camera_move_down_index];
         }
         public bool GetRadioControlOn()
         {
@@ -75,7 +70,7 @@ namespace hakoniwa.drone.sim
                     button_array[i] = cmd_game_ctrl.button[i];
                     //Debug.Log($"Button[{i}] = {button_array[i]}");
                 }
-                if (button_array[this.game_ops_arm_button_index])
+                if (button_array[DroneControlPdu.game_ops_arm_button_index])
                 {
                     is_radio_control = true;
                 }

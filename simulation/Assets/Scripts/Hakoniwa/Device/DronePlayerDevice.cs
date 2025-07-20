@@ -1,16 +1,19 @@
-using UnityEngine;
+using hakoniwa.ar.bridge;
+using hakoniwa.ar.bridge.sharesim;
+using hakoniwa.drone;
 using hakoniwa.drone.service;
-using System;
+using hakoniwa.objects.core;
+using hakoniwa.objects.core.sensors;
+using hakoniwa.pdu.core;
 using hakoniwa.pdu.interfaces;
 using hakoniwa.pdu.msgs.geometry_msgs;
 using hakoniwa.pdu.msgs.hako_mavlink_msgs;
-using hakoniwa.ar.bridge;
-using System.Threading.Tasks;
 using hakoniwa.pdu.msgs.hako_msgs;
-using hakoniwa.ar.bridge.sharesim;
-using hakoniwa.drone;
+using System;
+using System.Threading.Tasks;
+using UnityEngine;
 
-public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
+public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject, IDroneDisturbableObject
 {
     public GameObject body;
     public int debuff_duration_msec = 100;
@@ -21,6 +24,7 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
     private BaggageGrabber baggage_grabber;
     private ShareSimClient sharesim_client;
     public bool enable_debuff = false;
+    public bool useWebServer = true;
 
     public bool enable_data_logger = false;
     public string debug_logpath = null;
@@ -28,6 +32,10 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
     public string robotName = "Drone";
     public string pdu_name_propeller = "motor";
     public string pdu_name_pos = "pos";
+    private ICameraController camera_controller;
+    public DroneLedController[] leds;
+    public FlightModeLedController[] flight_mode_leds;
+    public PropellerWindController[] propeller_winds;
 
     private void SetPosition(Twist pos, UnityEngine.Vector3 unity_pos, UnityEngine.Vector3 unity_rot)
     {
@@ -110,8 +118,11 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
 
     void Start()
     {
-        sharesim_client = ShareSimClient.Instance;
-        ibridge = HakoniwaArBridgeDevice.Instance;
+        if (useWebServer)
+        {
+            sharesim_client = ShareSimClient.Instance;
+            ibridge = HakoniwaArBridgeDevice.Instance;
+        }
         my_collision = this.GetComponentInChildren<DroneCollision>();
         if (my_collision == null) {
             throw new Exception("Can not found collision");
@@ -130,7 +141,7 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
         baggage_grabber = this.GetComponentInChildren<BaggageGrabber>();
         if (baggage_grabber == null)
         {
-            throw new Exception("Can not found BaggageGrabber");
+            Debug.LogWarning("Can not found BaggageGrabber");
         }
 
         string droneConfigText = LoadTextFromResources("config/drone/rc/drone_config_0");
@@ -164,7 +175,43 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
                 throw new Exception("Can not Initialize DroneService RC with InitSingle: debug_logpath= " + debug_logpath);
             }
         }
+        /*
+         * Camera
+         */
+        camera_controller = GetComponentInChildren<ICameraController>();
+        if (camera_controller != null)
+        {
+            Debug.Log("Camera is enabled");
+            camera_controller.Initialize();
+        }
 
+        /*
+         * Leds
+         */
+        if (leds.Length > 0)
+        {
+            foreach (var led in leds)
+            {
+                led.SetMode(DroneLedController.DroneMode.DISARM);
+            }
+        }
+        if (flight_mode_leds.Length > 0)
+        {
+            foreach (var led in flight_mode_leds)
+            {
+                led.SetMode(FlightModeLedController.FlightMode.GPS);
+            }
+        }
+        /*
+         * Propeller Winds
+         */
+        if (propeller_winds.Length > 0)
+        {
+            foreach (var wind in propeller_winds)
+            {
+                wind.SetWindVelocityFromRos(UnityEngine.Vector3.zero);
+            }
+        }
         // DroneServiceRC.Startの呼び出し
         ret = DroneServiceRC.Start();
         Debug.Log("Start: ret = " + ret);
@@ -184,11 +231,15 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
     // Update is called once per frame
     void Update()
     {
-        if (ibridge.GetState() == BridgeState.POSITIONING)
+        if (ibridge != null && ibridge.GetState() == BridgeState.POSITIONING)
         {
             return;
         }
         drone_control.HandleInput();
+        if (camera_controller != null)
+        {
+            drone_control.HandleCameraControl(camera_controller, null);
+        }
     }
 
     private bool isGrabProcessing = false;
@@ -237,10 +288,18 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
             }
         }
     }
-
-
+    void LateUpdate()
+    {
+        if (camera_controller != null)
+        {
+            this.camera_controller.UpdateCameraAngle();
+        }
+    }
+    private UnityEngine.Vector3 rosWind;
+    private double temperature;
     private async void FixedUpdate()
     {
+        DroneServiceRC.PutDisturbance(0, temperature, rosWind.x, rosWind.y, rosWind.z);
         // 現在位置を記録
         for (int i = 0; i < 20; i++)
         {
@@ -256,7 +315,10 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
             unity_pos.x = -(float)y;
             unity_pos.y = (float)z;
             body.transform.position = unity_pos;
-            FlushPduPos(unity_pos);
+            if (useWebServer)
+            {
+                FlushPduPos(unity_pos);
+            }
         }
         double roll, pitch, yaw;
         ret = DroneServiceRC.GetAttitude(0, out roll, out pitch, out yaw);
@@ -275,14 +337,109 @@ public class DronePlayerDevice : MonoBehaviour, IHakoniwaArObject
         if (ret == 0)
         {
             drone_propeller.Rotate((float)c1, (float)c2, (float)c3, (float)c4);
-            FlushPduPropeller((float)c1, (float)c2, (float)c3, (float)c4);
+            if (useWebServer)
+            {
+                FlushPduPropeller((float)c1, (float)c2, (float)c3, (float)c4);
+            }
         }
-        await GrabControlAsync();
+        if (baggage_grabber != null)
+        {
+            await GrabControlAsync();
+        }
+        /*
+         * Leds
+         */
+        int internal_state;
+        int flight_mode;
+        DroneServiceRC.GetInternalState(0, out internal_state);
+        DroneServiceRC.GetFlightMode(0, out flight_mode);
+        if (leds.Length > 0)
+        {
+            if (c1 > 0)
+            {
+                foreach (var led in leds)
+                {
+                    switch (internal_state)
+                    {
+                        case 0:
+                            led.SetMode(DroneLedController.DroneMode.TAKEOFF);
+                            break;
+                        case 1:
+                            led.SetMode(DroneLedController.DroneMode.HOVER);
+                            break;
+                        case 2:
+                            led.SetMode(DroneLedController.DroneMode.LANDING);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var led in leds)
+                {
+                    led.SetMode(DroneLedController.DroneMode.DISARM);
+                }
+            }
+        }
+        if (flight_mode_leds.Length > 0)
+        {
+            foreach (var led in flight_mode_leds)
+            {
+                if (flight_mode == 0)
+                {
+                    led.SetMode(FlightModeLedController.FlightMode.ATTI);
+                }
+                else
+                {
+                    led.SetMode(FlightModeLedController.FlightMode.GPS);
+                }
+            }
+        }
+        /*
+         * Propeller wind
+         */
+        if (propeller_winds.Length > 0)
+        {
+            UnityEngine.Vector3 rosWind = UnityEngine.Vector3.zero;
+            DroneServiceRC.GetPropellerWind(0, out rosWind);
+            //Debug.Log("rosWind: " + rosWind);
+            foreach (var wind in propeller_winds)
+            {
+                wind.SetWindVelocityFromRos(rosWind);
+            }
+        }
     }
 
     private void OnApplicationQuit()
     {
         int ret = DroneServiceRC.Stop();
         Debug.Log("Stop: ret = " + ret);
+    }
+
+    private UnityEngine.Vector3 UnityToRos(UnityEngine.Vector3 unityVec)
+    {
+        return new UnityEngine.Vector3(
+            unityVec.x,
+            -unityVec.z,
+            unityVec.y
+        );
+    }
+
+    public void ApplyDisturbance(float temp, UnityEngine.Vector3 windVector)
+    {
+        Debug.Log("ApplyDisturbance: " + windVector);
+        rosWind = UnityToRos(windVector);
+        temperature = temp;
+    }
+
+    public void ResetDisturbance()
+    {
+        Debug.Log("ResetDisturbance: ");
+        rosWind.x = 0;
+        rosWind.y = 0;
+        rosWind.z = 0;
+        temperature = 20;
     }
 }

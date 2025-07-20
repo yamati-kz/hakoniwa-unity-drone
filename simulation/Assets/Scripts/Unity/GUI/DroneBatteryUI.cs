@@ -11,10 +11,12 @@ namespace hakoniwa.objects.core
         private float fullVoltage = 14.8f;
         private float currentVoltage = 9.0f;
         private float temperature = 0.0f;
+        private float pressure = 1.0f;
         public Text fullVoltageText;
         public Text currVoltageText;
         public Text percentageText;
         public Text tempText;
+        public Text pressureText;
         public GameObject battery;
         private IDroneBatteryStatus drone_battery_status;
 
@@ -29,12 +31,18 @@ namespace hakoniwa.objects.core
             fullVoltage = (float)drone_battery_status.get_full_voltage();
             currentVoltage = (float)drone_battery_status.get_curr_voltage();
             temperature = (float)drone_battery_status.get_temperature();
+            pressure = (float)drone_battery_status.get_atmospheric_pressure();
             float batteryPercentage = currentVoltage / fullVoltage;
             float percentValue = batteryPercentage * 100.0f;
             uint battery_status_level = drone_battery_status.get_status();
             fullVoltageText.text = fullVoltage.ToString("F1");
             currVoltageText.text = currentVoltage.ToString("F1");
             tempText.text = temperature.ToString("F1");
+            if (pressureText != null)
+            {
+                pressureText.text = pressure.ToString("F1");
+                //Debug.Log("preassure: " + pressure);
+            }
             percentageText.text = percentValue.ToString("F1");
             Color color = Color.white;
             // 温度に応じた色を設定

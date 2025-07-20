@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 public class ImageCapture : MonoBehaviour
 {
     private MonitorCameraManager cameraManager;
-    private int captureCount = 0;
     public string imageName = "can";
     public GameObject rotationContainer;
     private float current_degree = 0;

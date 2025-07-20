@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace hakoniwa.objects.core
 {
@@ -70,5 +72,46 @@ namespace hakoniwa.objects.core
             inputActions.Gameplay.Disable();
         }
 
+        public bool IsUpButtonPressed()
+        {
+            return inputActions.Gameplay.Up.WasPressedThisFrame();
+        }
+
+        public bool IsUpButtonReleased()
+        {
+            return inputActions.Gameplay.Up.WasReleasedThisFrame() ;
+        }
+
+        public bool IsDownButtonPressed()
+        {
+            return inputActions.Gameplay.Down.WasPressedThisFrame();
+        }
+
+        public bool IsDownButtonReleased()
+        {
+            return inputActions.Gameplay.Down.WasReleasedThisFrame();
+        }
+
+
+        public void DoVibration(bool isRightHand, float frequency, float amplitude, float durationSec)
+        {
+            if (Gamepad.current != null)
+            {
+                float lowFreq = isRightHand ? 0.0f : amplitude;   // 左手→低周波
+                float highFreq = isRightHand ? amplitude : 0.0f;  // 右手→高周波
+
+                Gamepad.current.SetMotorSpeeds(lowFreq, highFreq);
+                StartCoroutine(StopVibrationAfter(durationSec));
+            }
+        }
+
+        private IEnumerator StopVibrationAfter(float duration)
+        {
+            yield return new WaitForSeconds(duration);
+            if (Gamepad.current != null)
+            {
+                Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+            }
+        }
     }
 }

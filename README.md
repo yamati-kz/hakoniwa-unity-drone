@@ -62,9 +62,9 @@ simulation/
 
 `world-expo2025` でタグ付けされています。
 
-# サンプル・ドローン
+# サンプル・モデル
 
-このプロジェクトでは、以下のドローンモデルが含まれています：
+このプロジェクトでは、以下のモデルが含まれています：
 
 ## `SimpleDrone`：基本的なドローンモデル
 - 3Dモデル：`drone-quadcopter.dae`
@@ -76,15 +76,28 @@ simulation/
 - 3Dモデル：`Turtlebot3.dae`
   - 取得元：[OnShape](https://www.onshape.com/en/)
     - 参照URL：https://cad.onshape.com/documents/58a2bdd2a263420f7a316285/w/01c383d9ab503ce7a7c42e3c/e/16a05a97d362a47b16a8f117
+
 ## `DJIAvatar`: ドローンモデル
 - 3Dモデル：`dji_avatar2.dae`
   - 取得元：[OnShape](https://www.onshape.com/en/)
     - 参照URL：https://cad.onshape.com/documents/8302790419ef6b56cd1eb03c/w/dad3a9c868c42504811a0d26/e/c8d69131de8ac6383b17593b
 
+## `pylon`：三角コーン
+- 3dモデル：`pylon.fbx`
+  - 取得元：[3D屋さん](https://3dyasan.com/)
+    - 参照URL：https://3dyasan.com/2021/05/10/pylon
+
 ## モデルの用途
-本リポジトリでは、OnShapeから取得したパブリックモデルを **シミュレーション環境でのビジュアライゼーション用途として** 使用しています。これらのモデルは物理演算やシミュレーションのテストに活用されますが、再配布や改変後の利用については保証されません。
+本リポジトリでは、上述のパブリックモデルを **シミュレーション環境でのビジュアライゼーション用途として** 使用しています。これらのモデルは物理演算やシミュレーションのテストに活用されますが、再配布や改変後の利用については保証されません。
 
 ## 注意
 これらのモデルはOnShape上のパブリックドキュメントから取得しています。本プロジェクトでは研究・非商用目的で使用していますが、OnShapeのパブリックドキュメントにはライセンス表記がないため、著作権や利用規約については各モデルの作成者に依存する可能性があります。
 
 そのため、商用利用や再配布を行う場合は、各モデルの作成者にライセンスを確認する必要があります。
+
+## 対応しているCollider
+
+`TargetColliderInfo` スクリプトでは `BoxCollider` を明示的にサポートしています。
+それ以外の `SphereCollider`、`CapsuleCollider`、`MeshCollider` などの形状は球体として近似され、
+法線計算が簡略化されます。衝突判定は行われますが、正確な法線情報を使用したい場合は
+`BoxCollider` を利用してください。

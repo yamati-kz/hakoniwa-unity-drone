@@ -80,6 +80,24 @@ public partial class @DroneInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""70b4ba44-e699-4954-aa56-82a5c927e903"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""767cdb60-3822-4204-b948-ef940057b5e8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -148,6 +166,28 @@ public partial class @DroneInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Wbutton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""be9b9fd0-f718-4cee-b6a4-c3cbe2a642dd"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c67d557-a7ed-4da2-9c09-5f3b3e7bf6f2"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -162,6 +202,8 @@ public partial class @DroneInputActions: IInputActionCollection2, IDisposable
         m_Gameplay_Ebutton = m_Gameplay.FindAction("Ebutton", throwIfNotFound: true);
         m_Gameplay_Nbutton = m_Gameplay.FindAction("Nbutton", throwIfNotFound: true);
         m_Gameplay_Wbutton = m_Gameplay.FindAction("Wbutton", throwIfNotFound: true);
+        m_Gameplay_Up = m_Gameplay.FindAction("Up", throwIfNotFound: true);
+        m_Gameplay_Down = m_Gameplay.FindAction("Down", throwIfNotFound: true);
     }
 
     ~@DroneInputActions()
@@ -234,6 +276,8 @@ public partial class @DroneInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Ebutton;
     private readonly InputAction m_Gameplay_Nbutton;
     private readonly InputAction m_Gameplay_Wbutton;
+    private readonly InputAction m_Gameplay_Up;
+    private readonly InputAction m_Gameplay_Down;
     public struct GameplayActions
     {
         private @DroneInputActions m_Wrapper;
@@ -244,6 +288,8 @@ public partial class @DroneInputActions: IInputActionCollection2, IDisposable
         public InputAction @Ebutton => m_Wrapper.m_Gameplay_Ebutton;
         public InputAction @Nbutton => m_Wrapper.m_Gameplay_Nbutton;
         public InputAction @Wbutton => m_Wrapper.m_Gameplay_Wbutton;
+        public InputAction @Up => m_Wrapper.m_Gameplay_Up;
+        public InputAction @Down => m_Wrapper.m_Gameplay_Down;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -271,6 +317,12 @@ public partial class @DroneInputActions: IInputActionCollection2, IDisposable
             @Wbutton.started += instance.OnWbutton;
             @Wbutton.performed += instance.OnWbutton;
             @Wbutton.canceled += instance.OnWbutton;
+            @Up.started += instance.OnUp;
+            @Up.performed += instance.OnUp;
+            @Up.canceled += instance.OnUp;
+            @Down.started += instance.OnDown;
+            @Down.performed += instance.OnDown;
+            @Down.canceled += instance.OnDown;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -293,6 +345,12 @@ public partial class @DroneInputActions: IInputActionCollection2, IDisposable
             @Wbutton.started -= instance.OnWbutton;
             @Wbutton.performed -= instance.OnWbutton;
             @Wbutton.canceled -= instance.OnWbutton;
+            @Up.started -= instance.OnUp;
+            @Up.performed -= instance.OnUp;
+            @Up.canceled -= instance.OnUp;
+            @Down.started -= instance.OnDown;
+            @Down.performed -= instance.OnDown;
+            @Down.canceled -= instance.OnDown;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -318,5 +376,7 @@ public partial class @DroneInputActions: IInputActionCollection2, IDisposable
         void OnEbutton(InputAction.CallbackContext context);
         void OnNbutton(InputAction.CallbackContext context);
         void OnWbutton(InputAction.CallbackContext context);
+        void OnUp(InputAction.CallbackContext context);
+        void OnDown(InputAction.CallbackContext context);
     }
 }
